@@ -1,0 +1,44 @@
+server:
+  port: ${PORT:3000}
+
+spring:
+  docker:
+    compose:
+      enabled: false
+  config:
+    import: optional:file:./config/secrets-dev.yml
+  datasource:
+    url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:3306}/${DB_NAME:blog_db}?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:change-me}
+  github:
+    client-id: ${GITHUB_CLIENT_ID:}
+    client-secret: ${GITHUB_CLIENT_SECRET:}
+    callback-url: ${GITHUB_CALLBACK_URL:}
+    redirect-page: ${GITHUB_REDIRECT_PAGE:}
+  deepseek:
+    api-key: ${DEEPSEEK_API_KEY:}
+    base-url: ${DEEPSEEK_BASE_URL:https://api.deepseek.com}
+  miniapp:
+    app-id: ${MINIAPP_APPID:}
+    secret: ${MINIAPP_SECRET:}
+    owner-openid: ${MINIAPP_OWNER_OPENID:}
+  cos:
+    secret-id: ${COS_SECRET_ID:}
+    secret-key: ${COS_SECRET_KEY:}
+    bucket: ${COS_BUCKET:}
+    region: ${COS_REGION:}
+  email:
+    host: ${EMAIL_HOST:}
+    port: ${EMAIL_PORT:465}
+    auth-user: ${EMAIL_AUTH_USER:}
+    auth-pass: ${EMAIL_AUTH_PASS:}
+    from: ${EMAIL_FROM:}
+  proxy:
+    host: ${HTTP_PROXY_HOST:}
+    port: ${HTTP_PROXY_PORT:}
