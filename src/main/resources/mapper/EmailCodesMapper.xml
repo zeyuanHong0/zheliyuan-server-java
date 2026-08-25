@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zly.blogbackjava.mapper.EmailCodesMapper">
+    <resultMap id="EmailCodesResultMap" type="org.zly.blogbackjava.entity.EmailCodes">
+        <id property="id" column="id"/>
+        <result property="email" column="email"/>
+        <result property="code" column="code"/>
+        <result property="used" column="used"/>
+        <result property="expiredTime" column="expiredTime"/>
+        <result property="createdTime" column="createdTime"/>
+    </resultMap>
+
+    <select id="selectLatestCodeByEmail" resultMap="EmailCodesResultMap">
+        SELECT * FROM email_codes
+        WHERE email = #{email}
+        ORDER BY createdTime DESC
+        LIMIT 1
+    </select>
+
+    <select id="selectLatestValidCodeByEmail" resultMap="EmailCodesResultMap">
+        SELECT * FROM email_codes
+        WHERE email = #{email} AND used = 0 AND expiredTime > NOW()
+    </select>
+
+    <insert id="insertEmailCode">
+        INSERT INTO email_codes (id, email, code, expiredTime)
+        VALUES (#{id}, #{email}, #{code}, #{expiredTime})
+    </insert>
+
+    <update id="markCodeAsUsed">
+        UPDATE email_codes
+        SET used = 1
+        WHERE id = #{id}
+    </update>
+
+
+</mapper>

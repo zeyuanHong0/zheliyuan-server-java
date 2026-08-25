@@ -2,6 +2,9 @@ server:
   port: ${PORT:3000}
 
 spring:
+  mvc:
+    servlet:
+      path: /api
   docker:
     compose:
       enabled: false
@@ -12,6 +15,19 @@ spring:
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:root}
     driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+    host: ${EMAIL_HOST:smtp.qq.com}
+    port: ${EMAIL_PORT:465}
+    username: ${EMAIL_AUTH_USER:}
+    password: ${EMAIL_AUTH_PASS:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+          starttls:
+            enable: true
 
 app:
   jwt:
@@ -33,12 +49,6 @@ app:
     secret-key: ${COS_SECRET_KEY:}
     bucket: ${COS_BUCKET:}
     region: ${COS_REGION:}
-  email:
-    host: ${EMAIL_HOST:}
-    port: ${EMAIL_PORT:465}
-    auth-user: ${EMAIL_AUTH_USER:}
-    auth-pass: ${EMAIL_AUTH_PASS:}
-    from: ${EMAIL_FROM:}
   proxy:
     host: ${HTTP_PROXY_HOST:}
     port: ${HTTP_PROXY_PORT:}
