@@ -3,6 +3,7 @@ package org.zly.blogbackjava.entity;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class User {
@@ -13,6 +14,8 @@ public class User {
 
     private String password;
 
+    private String email;
+
     private String accountType;
 
     private LocalDateTime createTime;
@@ -20,5 +23,7 @@ public class User {
     private LocalDateTime updateTime;
 
     private Boolean deleted;
+
+    private List<UserOauth> userOauths;
 
 }

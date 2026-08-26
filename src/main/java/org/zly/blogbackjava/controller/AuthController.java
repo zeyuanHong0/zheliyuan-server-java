@@ -2,10 +2,13 @@ package org.zly.blogbackjava.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import org.zly.blogbackjava.common.response.ApiResponse;
 import org.zly.blogbackjava.dto.request.EmailRequestDto;
 import org.zly.blogbackjava.dto.request.UserSigninDto;
 import org.zly.blogbackjava.dto.request.UserSignupDto;
 import org.zly.blogbackjava.service.AuthService;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -33,8 +36,8 @@ public class AuthController {
     }
 
     @PostMapping("/checkEmail")
-    public void checkEmailBeforeRegister(@RequestBody @Valid EmailRequestDto emailRequestDto) {
-        authService.checkEmailBeforeRegister(emailRequestDto.getEmail());
+    public ApiResponse<Map<String, Boolean>> checkEmailBeforeRegister(@RequestBody @Valid EmailRequestDto emailRequestDto) {
+        return authService.checkEmailBeforeRegister(emailRequestDto.getEmail());
     }
 
     @PostMapping("/forgotPassword/checkEmail")
