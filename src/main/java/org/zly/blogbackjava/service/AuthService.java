@@ -10,7 +10,7 @@ import java.util.Map;
 public interface AuthService {
     void signin(@Valid UserSigninDto userSigninDto);
 
-    void signup(@Valid UserSignupDto userSignupDto);
+    ApiResponse<Void> signup(@Valid UserSignupDto userSignupDto);
 
     void sendCode(@Valid String email);
 

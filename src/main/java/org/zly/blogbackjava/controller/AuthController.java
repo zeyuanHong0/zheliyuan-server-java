@@ -26,8 +26,8 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public void register(@RequestBody @Valid UserSignupDto userSignupDto) {
-        authService.signup(userSignupDto);
+    public ApiResponse<Void> register(@RequestBody @Valid UserSignupDto userSignupDto) {
+        return authService.signup(userSignupDto);
     }
 
     @PostMapping("/signout")

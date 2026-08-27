@@ -22,6 +22,8 @@
     <select id="selectLatestValidCodeByEmail" resultMap="EmailCodesResultMap">
         SELECT * FROM email_codes
         WHERE email = #{email} AND used = 0 AND expiredTime > NOW()
+        ORDER BY createdTime DESC
+        LIMIT 1
     </select>
 
     <insert id="insertEmailCode">

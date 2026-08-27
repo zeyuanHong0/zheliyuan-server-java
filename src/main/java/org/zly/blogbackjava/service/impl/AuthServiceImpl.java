@@ -1,10 +1,9 @@
 package org.zly.blogbackjava.service.impl;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.zly.blogbackjava.common.response.ApiResponse;
 import org.zly.blogbackjava.dto.request.UserSigninDto;
 import org.zly.blogbackjava.dto.request.UserSignupDto;
@@ -20,6 +19,7 @@ import org.zly.blogbackjava.util.IdGenerator;
 import java.util.Map;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -34,6 +34,21 @@ public class AuthServiceImpl implements AuthService {
     private String generateCode() {
         int code = ThreadLocalRandom.current().nextInt(0, 1000000);
         return String.format("%06d", code);
+    }
+
+    // 校验验证码
+    private Boolean verifyCode(String email, String code) {
+        EmailCodes latest = emailCodesRepository.selectLatestValidCodeByEmail(email);
+        if (latest == null) {
+            throw new BusinessException(400, "验证码不存在或已过期");
+        }
+        // 检查验证码是否匹配
+        if (!passwordEncoder.matches(code, latest.getCode())) {
+            throw new BusinessException(400, "验证码不正确");
+        }
+        // 标记验证码为已使用
+        emailCodesRepository.markCodeAsUsed(latest.getId());
+        return true;
     }
 
     @Override
@@ -65,7 +80,46 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void signup(UserSignupDto userSignupDto) {
+    @Transactional
+    public ApiResponse<Void> signup(UserSignupDto userSignupDto) {
+        String userName = userSignupDto.getUsername();
+        String password = userSignupDto.getPassword();
+        String email = userSignupDto.getEmail();
+        String emailCode = userSignupDto.getEmailCode();
+        // 检查邮箱是否存在
+        User existingEmailUser = userService.findUserByEmail(email);
+        if (existingEmailUser != null && existingEmailUser.getPassword() != null) {
+            throw new BusinessException(409, "邮箱已存在");
+        }
+
+        // 检查用户名是否已存在（合并场景下允许使用 OAuth 用户自己原有的用户名）
+        User existingUser = userService.findUserByUserName(userName);
+        if (existingUser != null && (existingEmailUser == null || !Objects.equals(existingUser.getId(), existingEmailUser.getId()))) {
+            throw new BusinessException(409, "用户名已存在");
+        }
+
+        // 校验邮箱验证码
+        Boolean isVerify = this.verifyCode(email, emailCode);
+        if (isVerify) {
+            // 加密密码
+            String hashedPassword = passwordEncoder.encode(password);
+            // 合并 OAuth 用户:同步更新用户名和密码
+            if (existingEmailUser != null && existingEmailUser.getPassword() == null) {
+                // 更新用户信息
+                existingEmailUser.setPassword(hashedPassword);
+                existingEmailUser.setUsername(userName);
+                userService.updateUser(existingEmailUser);
+            } else {
+                // 创建新用户
+                User newUser = new User();
+                newUser.setId(IdGenerator.generateId());
+                newUser.setUsername(userName);
+                newUser.setPassword(hashedPassword);
+                newUser.setEmail(email);
+                userService.saveUser(newUser);
+            }
+        }
+        return ApiResponse.success("注册成功", null);
     }
 
     @Override
@@ -74,7 +128,7 @@ public class AuthServiceImpl implements AuthService {
         if (latest != null && latest.getCreateTime() != null) {
             LocalDateTime now = LocalDateTime.now();
             if (now.minusSeconds(60).isBefore(latest.getCreateTime())) {
-                throw new RuntimeException("发送过于频繁，请稍后再试");
+                throw new BusinessException(429, "发送过于频繁，请稍后再试");
             }
         }
         // 生成验证码

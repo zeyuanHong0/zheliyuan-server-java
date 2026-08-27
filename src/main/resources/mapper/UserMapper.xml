@@ -43,5 +43,20 @@
         WHERE u.email = #{email}
     </select>
 
+    <select id="findByUserName" resultMap="UserResultMap">
+        SELECT * FROM users
+        WHERE username = #{username}
+    </select>
+
+    <insert id="insertUser">
+        INSERT INTO users (id, username, password, email, accountType)
+        VALUES (#{id}, #{username}, #{password}, #{email}, #{accountType})
+    </insert>
+
+    <update id="updateUser">
+        UPDATE users
+        SET password = #{password}, username = #{username}
+        WHERE id = #{id}
+    </update>
 
 </mapper>
