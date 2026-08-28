@@ -55,7 +55,13 @@
 
     <update id="updateUser">
         UPDATE users
-        SET password = #{password}, username = #{username}
+        <set>
+            <if test="password != null">password = #{password},</if>
+            <if test="username != null">username = #{username},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="accountType != null">accountType = #{accountType},</if>
+            <if test="deleted != null">is_deleted = #{deleted},</if>
+        </set>
         WHERE id = #{id}
     </update>
 
