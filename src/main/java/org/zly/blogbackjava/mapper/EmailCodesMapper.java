@@ -10,7 +10,7 @@ public interface EmailCodesMapper {
 
     EmailCodes selectLatestValidCodeByEmail(@Param("email") String email);
 
-    int insertEmailCode(@Param("id") String id, @Param("email") String email, @Param("code") String code, @Param("expiredTime") LocalDateTime expiredTime);
+    int insertEmailCode(@Param("id") String id, @Param("email") String email, @Param("code") String code, @Param("expiresTime") LocalDateTime expiresTime);
 
     int markCodeAsUsed(@Param("id") String id);
 }

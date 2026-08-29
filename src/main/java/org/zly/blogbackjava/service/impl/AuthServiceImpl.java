@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.zly.blogbackjava.common.response.ApiResponse;
 import org.zly.blogbackjava.dto.request.UserSigninDto;
 import org.zly.blogbackjava.dto.request.UserSignupDto;
+import org.zly.blogbackjava.dto.response.EmailAvailabilityResult;
 import org.zly.blogbackjava.entity.EmailCodes;
 import org.zly.blogbackjava.entity.User;
 import org.zly.blogbackjava.exception.BusinessException;
@@ -15,8 +15,7 @@ import org.zly.blogbackjava.service.AuthService;
 import org.zly.blogbackjava.service.EmailService;
 import org.zly.blogbackjava.service.UserService;
 import org.zly.blogbackjava.util.IdGenerator;
-
-import java.util.Map;
+import org.zly.blogbackjava.util.JwtUtil;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -29,6 +28,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final UserService userService;
+    private final JwtUtil jwtUtil;
 
     // 生成6位随机验证码
     private String generateCode() {
@@ -52,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public ApiResponse<Map<String, Boolean>> checkEmailBeforeRegister(String email) {
+    public EmailAvailabilityResult checkEmailBeforeRegister(String email) {
         // 校验邮箱格式
         String reg = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
         if (!email.matches(reg)) {
@@ -68,20 +68,34 @@ public class AuthServiceImpl implements AuthService {
                     provider = user.getUserOauths().get(0).getProvider();
                 }
                 String message = "该邮箱已通过" + (provider != null ? provider : "第三方") + "登录，继续注册将为账号设置密码";
-                return ApiResponse.success(message, Map.of("needSetPassword", true));
+                return new EmailAvailabilityResult(message, true);
             }
             throw new BusinessException(409, "邮箱已存在");
         }
-        return ApiResponse.success("邮箱可用", Map.of("needSetPassword", false));
+        return new EmailAvailabilityResult("邮箱可用", false);
     }
 
     @Override
-    public void signin(UserSigninDto userSigninDto) {
+    public String signin(UserSigninDto userSigninDto) {
+        String username = userSigninDto.getUsername();
+        String password = userSigninDto.getPassword();
+
+        // 支持通过用户名或邮箱登录
+        User user = userService.findUserByUserName(username);
+        if (user == null) {
+            user = userService.findUserByEmail(username);
+        }
+
+        if (user == null || user.getPassword() == null || !passwordEncoder.matches(password, user.getPassword())) {
+            throw new BusinessException(401, "账号或密码错误");
+        }
+
+        return jwtUtil.generateToken(user.getId(), user.getUsername());
     }
 
     @Override
     @Transactional
-    public ApiResponse<Void> signup(UserSignupDto userSignupDto) {
+    public String signup(UserSignupDto userSignupDto) {
         String userName = userSignupDto.getUsername();
         String password = userSignupDto.getPassword();
         String email = userSignupDto.getEmail();
@@ -99,45 +113,54 @@ public class AuthServiceImpl implements AuthService {
         }
 
         // 校验邮箱验证码
-        Boolean isVerify = this.verifyCode(email, emailCode);
-        if (isVerify) {
-            // 加密密码
-            String hashedPassword = passwordEncoder.encode(password);
-            // 合并 OAuth 用户:同步更新用户名和密码
-            if (existingEmailUser != null && existingEmailUser.getPassword() == null) {
-                // 更新用户信息
-                existingEmailUser.setPassword(hashedPassword);
-                existingEmailUser.setUsername(userName);
-                userService.updateUser(existingEmailUser);
-            } else {
-                // 创建新用户
-                User newUser = new User();
-                newUser.setId(IdGenerator.generateId());
-                newUser.setUsername(userName);
-                newUser.setPassword(hashedPassword);
-                newUser.setEmail(email);
-                userService.saveUser(newUser);
-            }
+        Boolean isValidCode = this.verifyCode(email, emailCode);
+        if (!isValidCode) {
+            throw new BusinessException(400, "验证码不正确或已过期");
         }
-        return ApiResponse.success("注册成功", null);
+
+        String token;
+        // 加密密码
+        String hashedPassword = passwordEncoder.encode(password);
+        // 合并 OAuth 用户:同步更新用户名和密码
+        if (existingEmailUser != null && existingEmailUser.getPassword() == null) {
+            // 更新用户信息
+            existingEmailUser.setPassword(hashedPassword);
+            existingEmailUser.setUsername(userName);
+            existingEmailUser.setAccountType("test");
+            userService.updateUser(existingEmailUser);
+            token = jwtUtil.generateToken(existingEmailUser.getId(), userName);
+        } else {
+            // 创建新用户
+            User newUser = new User();
+            newUser.setId(IdGenerator.generateId());
+            newUser.setUsername(userName);
+            newUser.setPassword(hashedPassword);
+            newUser.setEmail(email);
+            newUser.setAccountType("test");
+            userService.saveUser(newUser);
+            token = jwtUtil.generateToken(newUser.getId(), userName);
+        }
+
+        return token;
     }
 
     @Override
     public void sendCode(String email) {
         EmailCodes latest = emailCodesRepository.selectLatestCodeByEmail(email);
-        if (latest != null && latest.getCreateTime() != null) {
+        if (latest != null && latest.getCreatedTime() != null) {
             LocalDateTime now = LocalDateTime.now();
-            if (now.minusSeconds(60).isBefore(latest.getCreateTime())) {
+            if (now.minusSeconds(60).isBefore(latest.getCreatedTime())) {
                 throw new BusinessException(429, "发送过于频繁，请稍后再试");
             }
         }
         // 生成验证码
         String code = generateCode();
         String hashedCode = passwordEncoder.encode(code);
-        LocalDateTime expiredTime = LocalDateTime.now().plusMinutes(5); // 验证码有效期为5分钟
-        emailCodesRepository.insertEmailCode(IdGenerator.generateId(), email, hashedCode, expiredTime);
+        LocalDateTime expiresTime = LocalDateTime.now().plusMinutes(5); // 验证码有效期为5分钟
+        emailCodesRepository.insertEmailCode(IdGenerator.generateId(), email, hashedCode, expiresTime);
 
         // 发送邮件
         emailService.sendCodeEmail(email, code);
+
     }
 }

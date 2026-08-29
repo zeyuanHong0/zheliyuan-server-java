@@ -28,7 +28,8 @@ public class JwtUtil {
         // 用 生成 token
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + EXPIRATION_TIME); // 7天过期时间
-        return Jwts.builder().subject(id)
+        return Jwts.builder()
+                .claim("id", id)
                 .claim("username", username)
                 .issuedAt(now)
                 .expiration(expiryDate)

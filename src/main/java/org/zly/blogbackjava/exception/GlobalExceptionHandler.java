@@ -1,5 +1,6 @@
 package org.zly.blogbackjava.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.zly.blogbackjava.common.response.ApiResponse;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -10,6 +11,7 @@ import jakarta.validation.ConstraintViolationException;
 import java.util.Optional;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
@@ -49,6 +51,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ApiResponse<Void> handleUnknownException(Exception ex) {
-        return ApiResponse.error(500, ex.getMessage());
+        log.error("Unhandled server exception", ex);
+        return ApiResponse.error(500, "服务器内部错误");
     }
 }

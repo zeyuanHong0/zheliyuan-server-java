@@ -1,18 +1,15 @@
 package org.zly.blogbackjava.service;
 
-import jakarta.validation.Valid;
-import org.zly.blogbackjava.common.response.ApiResponse;
 import org.zly.blogbackjava.dto.request.UserSigninDto;
 import org.zly.blogbackjava.dto.request.UserSignupDto;
-
-import java.util.Map;
+import org.zly.blogbackjava.dto.response.EmailAvailabilityResult;
 
 public interface AuthService {
-    void signin(@Valid UserSigninDto userSigninDto);
+    String signin(UserSigninDto userSigninDto);
 
-    ApiResponse<Void> signup(@Valid UserSignupDto userSignupDto);
+    String signup(UserSignupDto userSignupDto);
 
-    void sendCode(@Valid String email);
+    void sendCode(String email);
 
-    ApiResponse<Map<String, Boolean>> checkEmailBeforeRegister(@Valid String email);
+    EmailAvailabilityResult checkEmailBeforeRegister(String email);
 }

@@ -25,8 +25,8 @@ public class EmailCodesRepositoryImpl implements EmailCodesRepository {
     }
 
     @Override
-    public int insertEmailCode(String id, String email, String code, LocalDateTime expiredTime) {
-        return emailCodesMapper.insertEmailCode(id, email, code, expiredTime);
+    public int insertEmailCode(String id, String email, String code, LocalDateTime expiresTime) {
+        return emailCodesMapper.insertEmailCode(id, email, code, expiresTime);
     }
 
     @Override

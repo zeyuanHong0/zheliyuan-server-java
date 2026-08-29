@@ -15,7 +15,7 @@ public class EmailCodes {
 
     private Boolean used;
 
-    private LocalDateTime createTime;
+    private LocalDateTime createdTime;
 
-    private LocalDateTime expireTime;
+    private LocalDateTime expiresTime;
 }

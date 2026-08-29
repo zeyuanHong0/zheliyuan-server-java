@@ -9,7 +9,7 @@ public interface EmailCodesRepository {
 
     EmailCodes selectLatestValidCodeByEmail(String email);
 
-    int insertEmailCode(String id, String email, String code, LocalDateTime expiredTime);
+    int insertEmailCode(String id, String email, String code, LocalDateTime expiresTime);
 
     int markCodeAsUsed(String id);
 }
