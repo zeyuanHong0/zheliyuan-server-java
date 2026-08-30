@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.zly.blogbackjava.common.response.ApiResponse;
 import org.zly.blogbackjava.dto.request.UserSigninDto;
 import org.zly.blogbackjava.dto.request.UserSignupDto;
 import org.zly.blogbackjava.dto.response.EmailAvailabilityResult;
@@ -13,11 +14,13 @@ import org.zly.blogbackjava.exception.BusinessException;
 import org.zly.blogbackjava.repository.EmailCodesRepository;
 import org.zly.blogbackjava.service.AuthService;
 import org.zly.blogbackjava.service.EmailService;
+import org.zly.blogbackjava.service.GithubService;
 import org.zly.blogbackjava.service.UserService;
 import org.zly.blogbackjava.util.IdGenerator;
 import org.zly.blogbackjava.util.JwtUtil;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -27,6 +30,7 @@ public class AuthServiceImpl implements AuthService {
     private final EmailCodesRepository emailCodesRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final GithubService githubService;
     private final UserService userService;
     private final JwtUtil jwtUtil;
 
@@ -161,6 +165,15 @@ public class AuthServiceImpl implements AuthService {
 
         // 发送邮件
         emailService.sendCodeEmail(email, code);
+    }
 
+    @Override
+    public ApiResponse<Map<String, String>> getGithubAuthorizeUrl() {
+        return githubService.getGithubAuthorizeUrl();
+    }
+
+    @Override
+    public String githubLogin(String code) {
+        return githubService.githubLogin(code);
     }
 }

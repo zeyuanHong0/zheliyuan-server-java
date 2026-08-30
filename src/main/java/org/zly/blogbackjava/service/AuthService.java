@@ -1,8 +1,11 @@
 package org.zly.blogbackjava.service;
 
+import org.zly.blogbackjava.common.response.ApiResponse;
 import org.zly.blogbackjava.dto.request.UserSigninDto;
 import org.zly.blogbackjava.dto.request.UserSignupDto;
 import org.zly.blogbackjava.dto.response.EmailAvailabilityResult;
+
+import java.util.Map;
 
 public interface AuthService {
     String signin(UserSigninDto userSigninDto);
@@ -12,4 +15,8 @@ public interface AuthService {
     void sendCode(String email);
 
     EmailAvailabilityResult checkEmailBeforeRegister(String email);
+
+    ApiResponse<Map<String, String>> getGithubAuthorizeUrl();
+
+    String githubLogin(String code);
 }

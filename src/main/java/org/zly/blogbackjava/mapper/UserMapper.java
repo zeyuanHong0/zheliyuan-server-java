@@ -7,6 +7,8 @@ public interface UserMapper {
 
     User findByEmailWithOauths(String email);
 
+    User findByProviderAndProviderId(String provider, String providerId);
+
     User findByUserName(String username);
 
     void insertUser(User user);

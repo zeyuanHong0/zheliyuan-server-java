@@ -43,6 +43,13 @@
         WHERE u.email = #{email}
     </select>
 
+    <select id="findByProviderAndProviderId" resultMap="UserWithOauthsMap">
+        SELECT u.*,o.id as oauth_id, o.provider, o.providerId, o.userId
+        FROM users u
+        LEFT JOIN user_oauth o ON u.id = o.userId
+        WHERE o.provider = #{provider} AND o.providerId = #{providerId}
+    </select>
+
     <select id="findByUserName" resultMap="UserResultMap">
         SELECT * FROM users
         WHERE username = #{username}

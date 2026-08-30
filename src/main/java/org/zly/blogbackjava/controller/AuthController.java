@@ -2,6 +2,8 @@ package org.zly.blogbackjava.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import org.zly.blogbackjava.common.response.ApiResponse;
 import org.zly.blogbackjava.dto.request.EmailRequestDto;
@@ -19,10 +21,16 @@ public class AuthController {
 
     private final AuthService authService;
     private final CookieUtil cookieUtil;
+    private final String githubRedirectPage;
 
-    public AuthController(AuthService authService, CookieUtil cookieUtil) {
+    public AuthController(
+            AuthService authService,
+            CookieUtil cookieUtil,
+            @Value("${app.github.redirect-page}") String githubRedirectPage
+    ) {
         this.authService = authService;
         this.cookieUtil = cookieUtil;
+        this.githubRedirectPage = githubRedirectPage;
     }
 
     @PostMapping("/signin")
@@ -73,13 +81,16 @@ public class AuthController {
     }
 
     @GetMapping("/github/url")
-    public void getGithubAuthorizeUrl() {
-
+    public ApiResponse<Map<String, String>> getGithubAuthorizeUrl() {
+        return authService.getGithubAuthorizeUrl();
     }
 
     @GetMapping("/github/callback")
-    public void githubCallback() {
-
+    public void githubCallback(@RequestParam("code") String code, HttpServletResponse response) {
+        String token = authService.githubLogin(code);
+        cookieUtil.setTokenCookie(response, token);
+        response.setStatus(HttpServletResponse.SC_FOUND);
+        response.setHeader(HttpHeaders.LOCATION, githubRedirectPage);
     }
 
 }
