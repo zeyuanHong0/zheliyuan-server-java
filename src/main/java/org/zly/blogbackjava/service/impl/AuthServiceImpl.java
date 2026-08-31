@@ -1,5 +1,6 @@
 package org.zly.blogbackjava.service.impl;
 
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     // 校验验证码
-    private Boolean verifyCode(String email, String code) {
+    public boolean verifyCode(String email, String code) {
         EmailCodes latest = emailCodesRepository.selectLatestValidCodeByEmail(email);
         if (latest == null) {
             throw new BusinessException(400, "验证码不存在或已过期");
@@ -53,6 +54,11 @@ public class AuthServiceImpl implements AuthService {
         // 标记验证码为已使用
         emailCodesRepository.markCodeAsUsed(latest.getId());
         return true;
+    }
+
+    @Override
+    public String generateResetToken(String email) {
+        return jwtUtil.generateResetToken(email);
     }
 
     @Override
@@ -78,6 +84,36 @@ public class AuthServiceImpl implements AuthService {
         }
         return new EmailAvailabilityResult("邮箱可用", false);
     }
+
+    @Override
+    public boolean forgetPasswordCheckEmail(String email) {
+        // 校验邮箱格式
+        String reg = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
+        if (!email.matches(reg)) {
+            throw new BusinessException(400, "邮箱格式不正确");
+        }
+        var user = userService.findUserByEmail(email);
+        return user != null;
+    }
+
+    @Override
+    public void resetPassword(String resetToken, String newPassword) {
+        try {
+            var payload = jwtUtil.parseToken(resetToken);
+            if (!"reset_password".equals(payload.get("type", String.class))) {
+                throw new BusinessException(400, "凭证类型不正确");
+            }
+            var user = userService.findUserByEmail(payload.get("email", String.class));
+            if (user == null) {
+                throw new BusinessException(404, "用户不存在");
+            }
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userService.updateUser(user);
+        } catch (JwtException | IllegalArgumentException ex) {
+            throw new BusinessException(400, "凭证无效或已过期");
+        }
+    }
+
 
     @Override
     public String signin(UserSigninDto userSigninDto) {
@@ -117,7 +153,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         // 校验邮箱验证码
-        Boolean isValidCode = this.verifyCode(email, emailCode);
+        boolean isValidCode = this.verifyCode(email, emailCode);
         if (!isValidCode) {
             throw new BusinessException(400, "验证码不正确或已过期");
         }

@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import org.zly.blogbackjava.common.response.ApiResponse;
-import org.zly.blogbackjava.dto.request.EmailRequestDto;
-import org.zly.blogbackjava.dto.request.UserSigninDto;
-import org.zly.blogbackjava.dto.request.UserSignupDto;
+import org.zly.blogbackjava.dto.request.*;
 import org.zly.blogbackjava.dto.response.EmailAvailabilityResult;
 import org.zly.blogbackjava.service.AuthService;
 import org.zly.blogbackjava.util.CookieUtil;
@@ -60,18 +58,23 @@ public class AuthController {
     }
 
     @PostMapping("/forgotPassword/checkEmail")
-    public void checkEmailBeforeForgotPassword(@RequestBody @Valid String email) {
-
+    public ApiResponse<Map<String, Boolean>> checkEmailBeforeForgotPassword(@RequestBody @Valid EmailRequestDto emailRequestDto) {
+        boolean exists = authService.forgetPasswordCheckEmail(emailRequestDto.getEmail());
+        return ApiResponse.success(exists ? "邮箱可用" : "邮箱不存在", Map.of("checkEmail", exists));
     }
 
     @PostMapping("/forgotPassword/verifyCode")
-    public void verifyCodeBeforeForgotPassword(@RequestBody @Valid String email, @RequestBody @Valid String code) {
-
+    public ApiResponse<Map<String, String>> verifyCodeBeforeForgotPassword(
+            @RequestBody @Valid VerifyCodeRequestDto verifyCodeRequestDto) {
+        authService.verifyCode(verifyCodeRequestDto.getEmail(), verifyCodeRequestDto.getCode());
+        String resetToken = authService.generateResetToken(verifyCodeRequestDto.getEmail());
+        return ApiResponse.success("验证码校验成功", Map.of("resetToken", resetToken));
     }
 
     @PostMapping("/forgotPassword/resetPassword")
-    public void resetPassword() {
-
+    public ApiResponse<Void> resetPassword(@RequestBody @Valid RestPasswordDto resetPasswordDto) {
+        authService.resetPassword(resetPasswordDto.getResetToken(), resetPasswordDto.getNewPassword());
+        return ApiResponse.success("密码重置成功", null);
     }
 
     @PostMapping("/sendCode")

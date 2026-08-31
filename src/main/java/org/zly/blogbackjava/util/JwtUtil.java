@@ -37,6 +37,18 @@ public class JwtUtil {
                 .compact();
     }
 
+    public String generateResetToken(String email) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + 5 * 60 * 1000);
+        return Jwts.builder()
+                .claim("email", email)
+                .claim("type", "reset_password")
+                .issuedAt(now)
+                .expiration(expiryDate)
+                .signWith(getSigningKey())
+                .compact();
+    }
+
     public Claims parseToken(String token) {
         // 解析 token，返回 claims
         return Jwts.parser()

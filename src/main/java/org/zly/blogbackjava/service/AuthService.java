@@ -14,7 +14,15 @@ public interface AuthService {
 
     void sendCode(String email);
 
+    boolean verifyCode(String email, String code);
+
+    String generateResetToken(String email);
+
     EmailAvailabilityResult checkEmailBeforeRegister(String email);
+
+    boolean forgetPasswordCheckEmail(String email);
+
+    void resetPassword(String resetToken, String newPassword);
 
     ApiResponse<Map<String, String>> getGithubAuthorizeUrl();
 
