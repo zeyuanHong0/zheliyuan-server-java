@@ -36,6 +36,12 @@
         LIMIT 1
     </select>
 
+    <select id="findById" resultMap="UserResultMap">
+        SELECT * FROM users
+        WHERE id = #{id}
+    </select>
+
+
     <select id="findByEmailWithOauths" resultMap="UserWithOauthsMap">
         SELECT u.*,o.id as oauth_id, o.provider, o.providerId, o.userId
         FROM users u

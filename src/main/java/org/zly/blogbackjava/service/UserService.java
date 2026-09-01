@@ -6,6 +6,8 @@ import org.zly.blogbackjava.enums.OAuthProvider;
 public interface UserService {
     User findUserByEmail(String email);
 
+    User findUserById(String id);
+
     User findUserByUserName(String username);
 
     void saveUser(User user);

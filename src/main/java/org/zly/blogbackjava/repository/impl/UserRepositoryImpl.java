@@ -19,6 +19,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User findById(String id) {
+        return userMapper.findById(id);
+    }
+
+    @Override
     public User findByEmailWithOauths(String email) {
         return userMapper.findByEmailWithOauths(email);
     }
