@@ -2,6 +2,7 @@ package org.zly.blogbackjava.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.zly.blogbackjava.dto.response.UserProfileDto;
 import org.zly.blogbackjava.entity.User;
 import org.zly.blogbackjava.entity.UserOauth;
 import org.zly.blogbackjava.enums.OAuthProvider;
@@ -72,5 +73,22 @@ public class UserServiceImpl implements UserService {
         userOauthRepository.insertUserOauth(userOauth);
 
         return user;
+    }
+
+    @Override
+    public UserProfileDto getProfile(String userId) {
+        User user = userRepository.findById(userId);
+        return new UserProfileDto(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getAccountType()
+        );
+    }
+
+    @Override
+    public boolean isAdmin(String userId) {
+        User user = userRepository.findById(userId);
+        return user != null && Role.ADMIN.getCode().equals(user.getAccountType());
     }
 }
