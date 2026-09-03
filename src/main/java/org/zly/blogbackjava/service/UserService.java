@@ -1,5 +1,6 @@
 package org.zly.blogbackjava.service;
 
+import org.zly.blogbackjava.dto.request.UpdateProfileDto;
 import org.zly.blogbackjava.entity.User;
 import org.zly.blogbackjava.dto.response.UserProfileDto;
 import org.zly.blogbackjava.enums.OAuthProvider;
@@ -20,4 +21,6 @@ public interface UserService {
     UserProfileDto getProfile(String userId);
 
     boolean isAdmin(String userId);
+
+    void updateProfile(String userId, UpdateProfileDto updateProfileDto);
 }

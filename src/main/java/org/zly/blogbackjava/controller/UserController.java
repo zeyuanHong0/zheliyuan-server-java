@@ -1,17 +1,16 @@
 package org.zly.blogbackjava.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.zly.blogbackjava.annotation.RequireLogin;
 import org.zly.blogbackjava.common.response.ApiResponse;
 import org.zly.blogbackjava.dto.request.UpdateProfileDto;
 import org.zly.blogbackjava.dto.response.UserProfileDto;
 import org.zly.blogbackjava.entity.User;
 import org.zly.blogbackjava.service.UserService;
+import org.zly.blogbackjava.util.CookieUtil;
 
 import java.util.Map;
 
@@ -20,9 +19,11 @@ import java.util.Map;
 @RequireLogin
 public class UserController {
     private final UserService userService;
+    private final CookieUtil cookieUtil;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, CookieUtil cookieUtil) {
         this.userService = userService;
+        this.cookieUtil = cookieUtil;
     }
 
     /**
@@ -50,9 +51,12 @@ public class UserController {
      *
      * @param user             当前登录的用户对象
      * @param updateProfileDto 包含更新信息的 DTO 对象
-     * @param request          HTTP 请求对象
+     * @param response          HTTP 响应对象
      */
-    @PutMapping("/update/Profile")
-    public void updateProfile(@AuthenticationPrincipal User user, UpdateProfileDto updateProfileDto, HttpServletRequest request) {
+    @PutMapping("/update/profile")
+    public ApiResponse<Void> updateProfile(@AuthenticationPrincipal User user, @RequestBody UpdateProfileDto updateProfileDto, HttpServletResponse response) {
+        userService.updateProfile(user.getId(), updateProfileDto);
+        cookieUtil.clearTokenCookie(response);
+        return ApiResponse.success("更新成功", null);
     }
 }
