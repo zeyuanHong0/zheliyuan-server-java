@@ -11,7 +11,7 @@
         <result property="accountType" column="accountType"/>
         <result property="createTime" column="createTime"/>
         <result property="updateTime" column="updateTime"/>
-        <result property="deleted" column="is_deleted"/>
+        <result property="isDelete" column="is_delete"/>
     </resultMap>
     <resultMap id="UserWithOauthsMap" type="User">
         <id property="id" column="id"/>
@@ -21,7 +21,7 @@
         <result property="accountType" column="accountType"/>
         <result property="createTime" column="createTime"/>
         <result property="updateTime" column="updateTime"/>
-        <result property="deleted" column="is_deleted"/>
+        <result property="isDelete" column="is_delete"/>
         <collection property="userOauths" ofType="UserOauth">
             <id property="id" column="oauth_id"/>
             <result property="provider" column="provider"/>
@@ -61,6 +61,31 @@
         WHERE username = #{username}
     </select>
 
+    <select id="getUserList" resultMap="UserResultMap">
+        SELECT * FROM users
+        <where>
+            <if test="name != null and name.trim() != ''">
+                (username LIKE CONCAT('%', #{name}, '%') OR email LIKE CONCAT('%', #{name}, '%'))
+            </if>
+        </where>
+        ORDER BY createTime DESC , id DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="countUserList" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM users
+        <where>
+            <if test="name != null and name.trim() != ''">
+                AND (
+                username LIKE CONCAT('%', #{name}, '%')
+                OR email LIKE CONCAT('%', #{name}, '%')
+                )
+            </if>
+        </where>
+    </select>
+
+
     <insert id="insertUser">
         INSERT INTO users (id, username, password, email, accountType)
         VALUES (#{id}, #{username}, #{password}, #{email}, #{accountType})
@@ -73,7 +98,7 @@
             <if test="username != null">username = #{username},</if>
             <if test="email != null">email = #{email},</if>
             <if test="accountType != null">accountType = #{accountType},</if>
-            <if test="deleted != null">is_deleted = #{deleted},</if>
+            <if test="isDelete != null">is_delete = #{isDelete},</if>
         </set>
         WHERE id = #{id}
     </update>

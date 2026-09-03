@@ -22,7 +22,7 @@ public class User {
 
     private LocalDateTime updateTime;
 
-    private Boolean deleted;
+    private Integer isDelete;
 
     private List<UserOauth> userOauths;
 

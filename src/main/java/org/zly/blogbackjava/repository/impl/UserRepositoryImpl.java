@@ -1,9 +1,12 @@
 package org.zly.blogbackjava.repository.impl;
 
 import org.springframework.stereotype.Component;
+import org.zly.blogbackjava.dto.request.UserListAdminDto;
 import org.zly.blogbackjava.entity.User;
 import org.zly.blogbackjava.mapper.UserMapper;
 import org.zly.blogbackjava.repository.UserRepository;
+
+import java.util.List;
 
 @Component
 public class UserRepositoryImpl implements UserRepository {
@@ -47,4 +50,15 @@ public class UserRepositoryImpl implements UserRepository {
     public void updateUser(User user) {
         userMapper.updateUser(user);
     }
+
+    @Override
+    public List<User> getUserList(String name, Integer offset, Integer pageSize) {
+        return userMapper.getUserList(name, offset, pageSize);
+    }
+
+    @Override
+    public Long countUserList(String name) {
+        return userMapper.countUserList(name);
+    }
+
 }

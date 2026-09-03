@@ -4,7 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.zly.blogbackjava.dto.request.ChangeUserStatusDto;
 import org.zly.blogbackjava.dto.request.UpdateProfileDto;
+import org.zly.blogbackjava.dto.request.UserListAdminDto;
+import org.zly.blogbackjava.dto.response.UserListAdminResult;
+import org.zly.blogbackjava.dto.response.UserListItem;
 import org.zly.blogbackjava.dto.response.UserProfileDto;
 import org.zly.blogbackjava.entity.User;
 import org.zly.blogbackjava.entity.UserOauth;
@@ -16,7 +20,8 @@ import org.zly.blogbackjava.repository.UserOauthRepository;
 import org.zly.blogbackjava.service.UserService;
 import org.zly.blogbackjava.util.IdGenerator;
 
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -118,5 +123,45 @@ public class UserServiceImpl implements UserService {
         if (username != null) updateUser.setUsername(username);
         if (password != null) updateUser.setPassword(passwordEncoder.encode(password));
         userRepository.updateUser(updateUser);
+    }
+
+    @Override
+    @Transactional
+    public UserListAdminResult getUserList(UserListAdminDto query) {
+        String name = query.getName();
+        Integer pageNum = query.getPageNum();
+        Integer pageSize = query.getPageSize();
+        Integer offset = (pageNum - 1) * pageSize;
+        List<UserListItem> list = userRepository.getUserList(name, offset, pageSize)
+                .stream().map((user) -> new UserListItem(
+                        user.getId(),
+                        user.getUsername(),
+                        user.getEmail(),
+                        user.getCreateTime(),
+                        user.getUpdateTime(),
+                        user.getIsDelete()
+                )).toList();
+        Long total = userRepository.countUserList(name);
+        return new UserListAdminResult(list, total, pageNum, pageSize);
+    }
+
+    @Override
+    public void changeUserStatus(ChangeUserStatusDto changeUserStatusDto) {
+        String userId = changeUserStatusDto.getId();
+        Integer status = changeUserStatusDto.getStatus();
+        if (userId == null || userId.isBlank()) {
+            throw new BusinessException(400, "用户 ID 不能为空");
+        }
+        if (status == null || (status != 0 && status != 1)) {
+            throw new BusinessException(400, "用户状态只能为 0 或 1");
+        }
+        if (userRepository.findById(userId) == null) {
+            throw new BusinessException(404, "用户不存在");
+        }
+
+        User user = new User();
+        user.setId(userId);
+        user.setIsDelete(status);
+        userRepository.updateUser(user);
     }
 }
