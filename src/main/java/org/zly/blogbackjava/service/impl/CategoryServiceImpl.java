@@ -2,8 +2,10 @@ package org.zly.blogbackjava.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.zly.blogbackjava.dto.response.CategoryInfoResult;
 import org.zly.blogbackjava.dto.response.CategoryPageListItem;
 import org.zly.blogbackjava.dto.response.CategoryPageListResult;
+import org.zly.blogbackjava.entity.Category;
 import org.zly.blogbackjava.exception.BusinessException;
 import org.zly.blogbackjava.repository.CategoryRepository;
 import org.zly.blogbackjava.service.CategoryService;
@@ -36,5 +38,35 @@ public class CategoryServiceImpl implements CategoryService {
                 .stream().map(category -> new CategoryPageListItem(category.getId(), category.getName(), category.getCreateTime(), category.getUpdateTime())).toList();
         Long count = categoryRepository.countCategoryList(name);
         return new CategoryPageListResult(list, pageNum, pageSize, count);
+    }
+
+    @Override
+    public CategoryInfoResult getCategoryInfo(String id) {
+        Category category = categoryRepository.getCategoryInfo(id);
+        if (category == null) {
+            throw new BusinessException(404, "分类不存在");
+        }
+        return new CategoryInfoResult(category.getId(), category.getName(), category.getCreateTime(), category.getUpdateTime());
+    }
+
+    @Override
+    public void updateCategory(String id, String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new BusinessException(400, "分类名称不能为空");
+        }
+        Category category = categoryRepository.getCategoryInfo(id);
+        if (category == null) {
+            throw new BusinessException(404, "分类不存在");
+        }
+        categoryRepository.updateCategory(id, name, null);
+    }
+
+    @Override
+    public void deleteCategory(String id) {
+        Category category = categoryRepository.getCategoryInfo(id);
+        if (category == null) {
+            throw new BusinessException(404, "分类不存在");
+        }
+        categoryRepository.updateCategory(id, null, 1);
     }
 }

@@ -12,4 +12,8 @@ public interface CategoryMapper {
     List<Category> getCategoryListByPage(@Param("name") String name, @Param("offset") Integer offset, @Param("pageSize") Integer pageSize);
 
     Long countCategoryList(@Param("name") String name);
+
+    Category getCategoryById(@Param("id") String id);
+
+    void updateCategory(@Param("id") String id, @Param("name") String name, @Param("isDelete") Integer isDelete);
 }

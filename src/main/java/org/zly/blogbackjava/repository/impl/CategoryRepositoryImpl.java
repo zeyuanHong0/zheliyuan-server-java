@@ -30,4 +30,14 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     public Long countCategoryList(String name) {
         return categoryMapper.countCategoryList(name);
     }
+
+    @Override
+    public Category getCategoryInfo(String id) {
+        return categoryMapper.getCategoryById(id);
+    }
+
+    @Override
+    public void updateCategory(String id, String name, Integer isDelete) {
+        categoryMapper.updateCategory(id, name, isDelete);
+    }
 }

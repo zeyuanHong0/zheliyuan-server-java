@@ -10,4 +10,8 @@ public interface CategoryRepository {
     List<Category> getCategoryListByPage(String name, Integer offset, Integer pageSize);
 
     Long countCategoryList(String name);
+
+    Category getCategoryInfo(String id);
+
+    void updateCategory(String id, String name,Integer isDelete);
 }
