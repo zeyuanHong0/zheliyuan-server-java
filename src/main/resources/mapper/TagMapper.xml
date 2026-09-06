@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zly.blogbackjava.mapper.TagMapper">
+    <resultMap id="TagResultMap" type="org.zly.blogbackjava.entity.Tag">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="icon" column="icon"/>
+        <result property="iconDark" column="icon_dark"/>
+        <result property="createTime" column="createTime"/>
+        <result property="updateTime" column="updateTime"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+
+    <select id="getTagListByPage" resultMap="TagResultMap">
+        SELECT * FROM tags
+        <where>
+            <if test="name != null and name.trim() != ''">
+                name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            AND is_delete = 0
+        </where>
+        ORDER BY createTime DESC , id DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="countTagList" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM tags
+        <where>
+            <if test="name != null and name.trim() != ''">
+                name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            AND is_delete = 0
+        </where>
+    </select>
+
+    <select id="getAllTags" resultMap="TagResultMap">
+        SELECT * FROM tags
+        WHERE is_delete = 0
+        ORDER BY createTime DESC
+    </select>
+
+    <select id="getTagById" resultMap="TagResultMap">
+        SELECT * FROM tags
+        WHERE id = #{id} AND is_delete = 0
+    </select>
+
+    <insert id="insertTag">
+        INSERT INTO tags (id, name, icon, icon_dark)
+        VALUES (#{id}, #{name}, #{icon}, #{iconDark})
+    </insert>
+
+    <update id="updateTag">
+        UPDATE tags
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="icon != null">icon = #{icon},</if>
+            <if test="iconDark != null">icon_dark = #{iconDark},</if>
+            <if test="isDelete != null">is_delete = #{isDelete},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+</mapper>
