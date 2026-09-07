@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import org.zly.blogbackjava.entity.Tag;
 import org.zly.blogbackjava.mapper.TagMapper;
 import org.zly.blogbackjava.repository.TagRepository;
+import org.zly.blogbackjava.validation.SvgSanitizer;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public void insertTag(String id, String name, String icon, String iconDark) {
-        tagMapper.insertTag(id, name, icon, iconDark);
+        tagMapper.insertTag(id, name, SvgSanitizer.sanitize(icon), SvgSanitizer.sanitize(iconDark));
     }
 
     @Override
@@ -43,6 +44,6 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public void updateTag(String id, String name, String icon, String iconDark, Integer isDelete) {
-        tagMapper.updateTag(id, name, icon, iconDark, isDelete);
+        tagMapper.updateTag(id, name, SvgSanitizer.sanitize(icon), SvgSanitizer.sanitize(iconDark), isDelete);
     }
 }
