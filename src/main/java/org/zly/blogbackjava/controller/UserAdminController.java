@@ -3,9 +3,9 @@ package org.zly.blogbackjava.controller;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.zly.blogbackjava.common.response.ApiResponse;
-import org.zly.blogbackjava.dto.request.ChangeUserStatusDto;
-import org.zly.blogbackjava.dto.request.UserListAdminDto;
-import org.zly.blogbackjava.dto.response.UserListAdminResult;
+import org.zly.blogbackjava.dto.user.request.ChangeUserStatusDto;
+import org.zly.blogbackjava.dto.user.request.UserListAdminDto;
+import org.zly.blogbackjava.dto.user.response.UserListAdminResult;
 import org.zly.blogbackjava.entity.User;
 import org.zly.blogbackjava.service.UserService;
 

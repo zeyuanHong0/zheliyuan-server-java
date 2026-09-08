@@ -47,17 +47,22 @@
         WHERE id = #{id} AND is_delete = 0
     </select>
 
+    <select id="getTagByName" resultMap="TagResultMap">
+        SELECT * FROM tags
+        WHERE name = #{name} AND is_delete = 0
+    </select>
+
     <insert id="insertTag">
         INSERT INTO tags (id, name, icon, icon_dark)
-        VALUES (#{id}, #{name}, #{icon}, #{iconDark})
+        VALUES (#{id}, #{name}, NULLIF(#{icon}, ''), NULLIF(#{iconDark}, ''))
     </insert>
 
     <update id="updateTag">
         UPDATE tags
         <set>
             <if test="name != null">name = #{name},</if>
-            <if test="icon != null">icon = #{icon},</if>
-            <if test="iconDark != null">icon_dark = #{iconDark},</if>
+            <if test="icon != null">icon = NULLIF(#{icon}, ''),</if>
+            <if test="iconDark != null">icon_dark = NULLIF(#{iconDark}, ''),</if>
             <if test="isDelete != null">is_delete = #{isDelete},</if>
         </set>
         WHERE id = #{id}

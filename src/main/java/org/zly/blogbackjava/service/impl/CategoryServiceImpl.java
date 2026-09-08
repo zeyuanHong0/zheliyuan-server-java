@@ -2,9 +2,9 @@ package org.zly.blogbackjava.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.zly.blogbackjava.dto.response.CategoryInfoResult;
-import org.zly.blogbackjava.dto.response.CategoryPageListItem;
-import org.zly.blogbackjava.dto.response.CategoryPageListResult;
+import org.zly.blogbackjava.dto.category.response.CategoryInfoResult;
+import org.zly.blogbackjava.dto.category.response.CategoryPageListItem;
+import org.zly.blogbackjava.dto.category.response.CategoryPageListResult;
 import org.zly.blogbackjava.entity.Category;
 import org.zly.blogbackjava.exception.BusinessException;
 import org.zly.blogbackjava.repository.CategoryRepository;

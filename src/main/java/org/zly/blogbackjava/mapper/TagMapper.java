@@ -26,6 +26,8 @@ public interface TagMapper {
 
     Tag getTagById(@Param("id") String id);
 
+    Tag getTagByName(@Param("name") String name);
+
     void updateTag(
             @Param("id") String id,
             @Param("name") String name,

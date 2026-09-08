@@ -1,6 +1,6 @@
 package org.zly.blogbackjava.repository;
 
-import org.zly.blogbackjava.dto.request.UserListAdminDto;
+import org.zly.blogbackjava.dto.user.request.UserListAdminDto;
 import org.zly.blogbackjava.entity.User;
 
 import java.util.List;

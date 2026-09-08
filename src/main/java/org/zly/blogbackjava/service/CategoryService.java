@@ -1,7 +1,7 @@
 package org.zly.blogbackjava.service;
 
-import org.zly.blogbackjava.dto.response.CategoryInfoResult;
-import org.zly.blogbackjava.dto.response.CategoryPageListResult;
+import org.zly.blogbackjava.dto.category.response.CategoryInfoResult;
+import org.zly.blogbackjava.dto.category.response.CategoryPageListResult;
 
 public interface CategoryService {
 

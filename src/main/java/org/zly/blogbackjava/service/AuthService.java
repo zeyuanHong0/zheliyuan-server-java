@@ -1,9 +1,9 @@
 package org.zly.blogbackjava.service;
 
 import org.zly.blogbackjava.common.response.ApiResponse;
-import org.zly.blogbackjava.dto.request.UserSigninDto;
-import org.zly.blogbackjava.dto.request.UserSignupDto;
-import org.zly.blogbackjava.dto.response.EmailAvailabilityResult;
+import org.zly.blogbackjava.dto.auth.request.UserSigninDto;
+import org.zly.blogbackjava.dto.auth.request.UserSignupDto;
+import org.zly.blogbackjava.dto.auth.response.EmailAvailabilityResult;
 
 import java.util.Map;
 

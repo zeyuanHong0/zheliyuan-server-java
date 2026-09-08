@@ -1,7 +1,7 @@
 package org.zly.blogbackjava.repository.impl;
 
 import org.springframework.stereotype.Component;
-import org.zly.blogbackjava.dto.request.UserListAdminDto;
+import org.zly.blogbackjava.dto.user.request.UserListAdminDto;
 import org.zly.blogbackjava.entity.User;
 import org.zly.blogbackjava.mapper.UserMapper;
 import org.zly.blogbackjava.repository.UserRepository;

@@ -16,6 +16,9 @@ public class SafeSvgValidator implements ConstraintValidator<SafeSvg, String> {
         if (value == null) {
             return true;
         }
+        if (value.isEmpty()) {
+            return true;
+        }
         if (value.isBlank()) {
             return false;
         }

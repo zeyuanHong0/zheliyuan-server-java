@@ -43,6 +43,11 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
+    public Tag getTagByName(String name) {
+        return tagMapper.getTagByName(name);
+    }
+
+    @Override
     public void updateTag(String id, String name, String icon, String iconDark, Integer isDelete) {
         tagMapper.updateTag(id, name, SvgSanitizer.sanitize(icon), SvgSanitizer.sanitize(iconDark), isDelete);
     }

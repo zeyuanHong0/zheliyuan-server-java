@@ -16,5 +16,7 @@ public interface TagRepository {
 
     Tag getTagInfo(String id);
 
+    Tag getTagByName(String name);
+
     void updateTag(String id, String name, String icon, String iconDark, Integer isDelete);
 }

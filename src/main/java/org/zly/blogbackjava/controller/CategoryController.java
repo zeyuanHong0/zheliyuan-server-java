@@ -6,11 +6,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.zly.blogbackjava.annotation.RequireLogin;
 import org.zly.blogbackjava.common.response.ApiResponse;
-import org.zly.blogbackjava.dto.request.CategoryPageQueryDto;
-import org.zly.blogbackjava.dto.request.CreateCategoryDto;
-import org.zly.blogbackjava.dto.request.UpdateCategoryDto;
-import org.zly.blogbackjava.dto.response.CategoryInfoResult;
-import org.zly.blogbackjava.dto.response.CategoryPageListResult;
+import org.zly.blogbackjava.dto.category.request.CategoryPageQueryDto;
+import org.zly.blogbackjava.dto.category.request.CreateCategoryDto;
+import org.zly.blogbackjava.dto.category.request.UpdateCategoryDto;
+import org.zly.blogbackjava.dto.category.response.CategoryInfoResult;
+import org.zly.blogbackjava.dto.category.response.CategoryPageListResult;
 import org.zly.blogbackjava.service.CategoryService;
 
 import java.util.Map;

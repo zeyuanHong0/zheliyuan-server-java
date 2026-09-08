@@ -11,6 +11,9 @@ public final class SvgSanitizer {
         if (svg == null) {
             return null;
         }
+        if (svg.isEmpty()) {
+            return "";
+        }
 
         try {
             return SVGSanitizer.sanitize(svg);

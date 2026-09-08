@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import org.zly.blogbackjava.common.response.ApiResponse;
-import org.zly.blogbackjava.dto.request.*;
-import org.zly.blogbackjava.dto.response.EmailAvailabilityResult;
+import org.zly.blogbackjava.dto.auth.request.*;
+import org.zly.blogbackjava.dto.auth.response.EmailAvailabilityResult;
 import org.zly.blogbackjava.service.AuthService;
 import org.zly.blogbackjava.util.CookieUtil;
 
