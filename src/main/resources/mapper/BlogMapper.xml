@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zly.blogbackjava.mapper.BlogMapper">
+    <resultMap id="BlogResultMap" type="org.zly.blogbackjava.dto.blog.response.BlogPageListItem">
+        <id property="id" column="blog_id"/>
+        <result property="title" column="title"/>
+        <result property="published" column="published"/>
+        <result property="createTime" column="createTime"/>
+        <result property="updateTime" column="updateTime"/>
+
+        <association property="category"
+                     javaType="org.zly.blogbackjava.dto.blog.response.BlogCategoryItem">
+            <id property="id" column="category_id"/>
+            <result property="name" column="category_name"/>
+        </association>
+
+        <association property="author"
+                     javaType="org.zly.blogbackjava.dto.blog.response.BlogAuthorItem">
+            <id property="id" column="author_id"/>
+            <result property="name" column="author_name"/>
+        </association>
+    </resultMap>
+
+    <select id="getBlogPageList" resultMap="BlogResultMap">
+        SELECT
+        b.id AS blog_id,b.title,b.published,b.createTime,b.updateTime,
+        c.id AS category_id,c.name AS category_name,
+        u.id AS author_id,u.username AS author_name
+        FROM blogs b
+        LEFT JOIN category c ON b.categoryId = c.id
+        LEFT JOIN users u ON b.createUser = u.id
+        <where>
+            b.is_delete = 0
+            <if test="!isAdmin">
+                AND b.createUser = #{userId}
+            </if>
+            <if test="title != null and title.trim() != ''">
+                AND b.title LIKE CONCAT('%', #{title}, '%')
+            </if>
+            <if test="categoryId != null and categoryId.trim() != ''">
+                AND b.categoryId = #{categoryId}
+            </if>
+            <if test="tagIds != null and tagIds.size() > 0">
+                AND EXISTS (
+                SELECT 1
+                FROM blog_tags bt
+                WHERE bt.blogId = b.id
+                AND bt.tagId IN
+                <foreach collection="tagIds" item="tagId" open="(" separator="," close=")">
+                    #{tagId}
+                </foreach>
+                )
+            </if>
+        </where>
+        ORDER BY b.createTime DESC , b.id DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="countBlogPageList" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM blogs b
+        <where>
+            b.is_delete = 0
+            <if test="!isAdmin">
+                AND b.createUser = #{userId}
+            </if>
+            <if test="title != null and title.trim() != ''">
+                AND b.title LIKE CONCAT('%', #{title}, '%')
+            </if>
+            <if test="categoryId != null and categoryId.trim() != ''">
+                AND b.categoryId = #{categoryId}
+            </if>
+            <if test="tagIds != null and tagIds.size() > 0">
+                AND EXISTS (
+                SELECT 1
+                FROM blog_tags bt
+                WHERE bt.blogId = b.id
+                AND bt.tagId IN
+                <foreach collection="tagIds" item="tagId" open="(" separator="," close=")">
+                    #{tagId}
+                </foreach>
+                )
+            </if>
+        </where>
+    </select>
+
+    <select id="getTagsByBlogIds"
+            resultType="org.zly.blogbackjava.dto.blog.response.BlogTagListItem">
+    SELECT
+        bt.blogId AS blog_id,
+        t.id AS tag_id,
+        t.name AS tag_name
+        FROM blog_tags bt
+        INNER JOIN tags t ON bt.tagId = t.id
+        WHERE bt.blogId IN
+        <foreach collection="blogIds" item="blogId" open="(" separator="," close=")">
+            #{blogId}
+        </foreach>
+        AND t.is_delete = 0
+    </select>
+</mapper>
