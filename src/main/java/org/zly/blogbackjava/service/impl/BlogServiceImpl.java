@@ -31,6 +31,7 @@ public class BlogServiceImpl implements BlogService {
         Integer pageSize = blogPageQueryDto.getPageSize();
         Integer offset = (pageNum - 1) * pageSize;
         String searchCategoryId = blogPageQueryDto.getSearchCategoryId();
+
         List<String> tagIds = Arrays.stream(
                         Optional.ofNullable(blogPageQueryDto.getSearchTags()).orElse("").split(",")
                 )
