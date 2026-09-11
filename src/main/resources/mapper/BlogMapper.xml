@@ -23,6 +23,23 @@
         </association>
     </resultMap>
 
+    <resultMap id="BlogInfoBaseResultMap"
+               type="org.zly.blogbackjava.dto.blog.response.BlogInfoResult">
+        <id property="id" column="blog_id"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="content" column="content"/>
+        <result property="published" column="published"/>
+        <result property="aiSummary" column="ai_summary"/>
+
+        <association property="category"
+                     javaType="org.zly.blogbackjava.dto.blog.response.BlogCategoryItem">
+            <id property="id" column="category_id"/>
+            <result property="name" column="category_name"/>
+        </association>
+    </resultMap>
+
+
     <select id="getBlogPageList" resultMap="BlogResultMap">
         SELECT
         b.id AS blog_id,b.title,b.published,b.createTime,b.updateTime,
@@ -88,7 +105,7 @@
 
     <select id="getTagsByBlogIds"
             resultType="org.zly.blogbackjava.dto.blog.response.BlogTagListItem">
-    SELECT
+        SELECT
         bt.blogId AS blog_id,
         t.id AS tag_id,
         t.name AS tag_name
@@ -99,5 +116,14 @@
             #{blogId}
         </foreach>
         AND t.is_delete = 0
+    </select>
+
+    <select id="getBlogById" resultMap="BlogResultMap">
+        SELECT b.id AS blog_id,b.title,b.description,b.content,b.published,b.aiSummary,
+        c.id AS category_id,c.name AS category_name
+        FROM blogs b
+        LEFT JOIN category c ON b.categoryId = c.id
+        WHERE id = #{id}
+        AND is_delete = 0
     </select>
 </mapper>
