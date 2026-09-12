@@ -3,6 +3,7 @@ package org.zly.blogbackjava.service.impl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.zly.blogbackjava.dto.category.response.CategoryInfoResult;
+import org.zly.blogbackjava.dto.category.response.CategoryListResult;
 import org.zly.blogbackjava.dto.category.response.CategoryPageListItem;
 import org.zly.blogbackjava.dto.category.response.CategoryPageListResult;
 import org.zly.blogbackjava.entity.Category;
@@ -68,5 +69,13 @@ public class CategoryServiceImpl implements CategoryService {
             throw new BusinessException(404, "分类不存在");
         }
         categoryRepository.updateCategory(id, null, 1);
+    }
+
+    @Override
+    public List<CategoryListResult> getAllCategoryList() {
+        List<Category> categories = categoryRepository.getAllCategoryList();
+        return categories.stream()
+                .map(category -> new CategoryListResult(category.getId(), category.getName()))
+                .toList();
     }
 }

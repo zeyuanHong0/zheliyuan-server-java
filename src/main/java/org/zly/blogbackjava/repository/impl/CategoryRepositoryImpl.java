@@ -40,4 +40,9 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     public void updateCategory(String id, String name, Integer isDelete) {
         categoryMapper.updateCategory(id, name, isDelete);
     }
+
+    @Override
+    public List<Category> getAllCategoryList() {
+        return categoryMapper.getAllCategoryList();
+    }
 }

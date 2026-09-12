@@ -10,9 +10,11 @@ import org.zly.blogbackjava.dto.category.request.CategoryPageQueryDto;
 import org.zly.blogbackjava.dto.category.request.CreateCategoryDto;
 import org.zly.blogbackjava.dto.category.request.UpdateCategoryDto;
 import org.zly.blogbackjava.dto.category.response.CategoryInfoResult;
+import org.zly.blogbackjava.dto.category.response.CategoryListResult;
 import org.zly.blogbackjava.dto.category.response.CategoryPageListResult;
 import org.zly.blogbackjava.service.CategoryService;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -31,6 +33,12 @@ public class CategoryController {
     public ApiResponse<Void> createCategory(@Valid @RequestBody CreateCategoryDto createCategoryDto) {
         categoryService.createCategory(createCategoryDto.getName());
         return ApiResponse.success("创建分类成功", null);
+    }
+
+    @GetMapping("/getAllCategoryList")
+    public ApiResponse<List<CategoryListResult>> getAllCategoryList() {
+        List<CategoryListResult> result = categoryService.getAllCategoryList();
+        return ApiResponse.success("获取所有分类列表成功", result);
     }
 
     @GetMapping("/getCategoryListByPage")

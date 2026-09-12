@@ -13,5 +13,7 @@ public interface CategoryRepository {
 
     Category getCategoryInfo(String id);
 
-    void updateCategory(String id, String name,Integer isDelete);
+    void updateCategory(String id, String name, Integer isDelete);
+
+    List<Category> getAllCategoryList();
 }

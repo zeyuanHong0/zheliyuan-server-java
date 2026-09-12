@@ -34,7 +34,7 @@
         </where>
     </select>
 
-    <select id="getAllCategory" resultMap="CategoryResultMap">
+    <select id="getAllCategoryList" resultMap="CategoryResultMap">
         SELECT * FROM category
         WHERE is_delete = 0
         ORDER BY createTime DESC

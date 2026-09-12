@@ -1,7 +1,11 @@
 package org.zly.blogbackjava.service;
 
 import org.zly.blogbackjava.dto.category.response.CategoryInfoResult;
+import org.zly.blogbackjava.dto.category.response.CategoryListResult;
 import org.zly.blogbackjava.dto.category.response.CategoryPageListResult;
+import org.zly.blogbackjava.entity.Category;
+
+import java.util.List;
 
 public interface CategoryService {
 
@@ -14,4 +18,6 @@ public interface CategoryService {
     void updateCategory(String id, String name);
 
     void deleteCategory(String id);
+
+    List<CategoryListResult> getAllCategoryList();
 }

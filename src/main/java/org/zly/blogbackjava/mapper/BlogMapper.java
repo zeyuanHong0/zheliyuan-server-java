@@ -32,4 +32,5 @@ public interface BlogMapper {
     );
 
     BlogInfoResult getBlogById(@Param("id") String id);
+
 }

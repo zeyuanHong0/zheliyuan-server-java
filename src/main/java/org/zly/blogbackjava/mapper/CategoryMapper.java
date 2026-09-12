@@ -16,4 +16,6 @@ public interface CategoryMapper {
     Category getCategoryById(@Param("id") String id);
 
     void updateCategory(@Param("id") String id, @Param("name") String name, @Param("isDelete") Integer isDelete);
+
+    List<Category> getAllCategoryList();
 }
