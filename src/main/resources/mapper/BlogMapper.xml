@@ -30,7 +30,7 @@
         <result property="description" column="description"/>
         <result property="content" column="content"/>
         <result property="published" column="published"/>
-        <result property="aiSummary" column="ai_summary"/>
+        <result property="aiSummary" column="aiSummary"/>
 
         <association property="category"
                      javaType="org.zly.blogbackjava.dto.blog.response.BlogCategoryItem">
@@ -118,12 +118,38 @@
         AND t.is_delete = 0
     </select>
 
-    <select id="getBlogById" resultMap="BlogResultMap">
+    <select id="getBlogById" resultMap="BlogInfoBaseResultMap">
         SELECT b.id AS blog_id,b.title,b.description,b.content,b.published,b.aiSummary,
         c.id AS category_id,c.name AS category_name
         FROM blogs b
         LEFT JOIN category c ON b.categoryId = c.id
-        WHERE id = #{id}
-        AND is_delete = 0
+        WHERE b.id = #{id}
+        AND b.is_delete = 0
     </select>
+
+    <select id="getBlogTags" resultType="org.zly.blogbackjava.entity.Tag">
+        SELECT t.*
+        FROM blog_tags bt
+        INNER JOIN tags t ON bt.tagId = t.id
+        WHERE bt.blogId = #{blogId}
+        AND t.is_delete = 0
+    </select>
+
+    <insert id="insertBlog">
+        INSERT INTO blogs (id, title, description, content, published, categoryId, createUser)
+        VALUES (#{id}, #{title}, #{description}, #{content}, #{published}, #{categoryId}, #{createUser})
+    </insert>
+
+    <update id="updateBlog">
+        UPDATE blogs
+        <set>
+            <if test="title != null">title = #{title},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="published != null">published = #{published},</if>
+            <if test="categoryId != null">categoryId = #{categoryId},</if>
+            <if test="aiSummary != null">aiSummary = #{aiSummary},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
 </mapper>

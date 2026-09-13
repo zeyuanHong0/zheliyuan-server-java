@@ -5,6 +5,7 @@ import org.zly.blogbackjava.dto.blog.response.BlogInfoResult;
 import org.zly.blogbackjava.dto.blog.response.BlogPageListItem;
 import org.zly.blogbackjava.dto.blog.response.BlogTagListItem;
 import org.zly.blogbackjava.entity.Blog;
+import org.zly.blogbackjava.entity.Tag;
 
 import java.util.List;
 
@@ -30,6 +31,8 @@ public interface BlogMapper {
     List<BlogTagListItem> getTagsByBlogIds(
             @Param("blogIds") List<String> blogIds
     );
+
+    List<Tag> getBlogTags(@Param("blogId") String blogId);
 
     BlogInfoResult getBlogById(@Param("id") String id);
 

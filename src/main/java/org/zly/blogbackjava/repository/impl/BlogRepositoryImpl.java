@@ -1,8 +1,10 @@
 package org.zly.blogbackjava.repository.impl;
 
 import org.springframework.stereotype.Component;
+import org.zly.blogbackjava.dto.blog.response.BlogInfoResult;
 import org.zly.blogbackjava.dto.blog.response.BlogPageListItem;
 import org.zly.blogbackjava.dto.blog.response.BlogTagListItem;
+import org.zly.blogbackjava.entity.Tag;
 import org.zly.blogbackjava.mapper.BlogMapper;
 import org.zly.blogbackjava.repository.BlogRepository;
 
@@ -28,7 +30,17 @@ public class BlogRepositoryImpl implements BlogRepository {
     }
 
     @Override
+    public List<Tag> getBlogTags(String blogId) {
+        return blogMapper.getBlogTags(blogId);
+    }
+
+    @Override
     public Long countBlogPageList(String title, String categoryId, List<String> tagIds, String userId, boolean isAdmin) {
         return blogMapper.countBlogPageList(title, categoryId, tagIds, userId, isAdmin);
+    }
+
+    @Override
+    public BlogInfoResult getBlogInfo(String id) {
+        return blogMapper.getBlogById(id);
     }
 }
