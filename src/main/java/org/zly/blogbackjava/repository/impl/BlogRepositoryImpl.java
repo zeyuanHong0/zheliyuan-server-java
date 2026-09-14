@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import org.zly.blogbackjava.dto.blog.response.BlogInfoResult;
 import org.zly.blogbackjava.dto.blog.response.BlogPageListItem;
 import org.zly.blogbackjava.dto.blog.response.BlogTagListItem;
+import org.zly.blogbackjava.entity.Blog;
 import org.zly.blogbackjava.entity.Tag;
 import org.zly.blogbackjava.mapper.BlogMapper;
 import org.zly.blogbackjava.repository.BlogRepository;
@@ -17,6 +18,11 @@ public class BlogRepositoryImpl implements BlogRepository {
 
     public BlogRepositoryImpl(BlogMapper blogMapper) {
         this.blogMapper = blogMapper;
+    }
+
+    @Override
+    public void save(Blog blog){
+        blogMapper.insertBlog(blog);
     }
 
     @Override

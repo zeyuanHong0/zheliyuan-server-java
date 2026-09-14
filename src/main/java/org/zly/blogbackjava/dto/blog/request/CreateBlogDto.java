@@ -1,7 +1,8 @@
 package org.zly.blogbackjava.dto.blog.request;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.List;
@@ -18,12 +19,12 @@ public class CreateBlogDto {
     @NotBlank(message = "内容不能为空")
     private String content;
 
-    @NotBlank(message = "发布状态不能为空")
+    @NotNull(message = "发布状态不能为空")
     private Integer published;
 
     @NotBlank(message = "分类不能为空")
     private String category;
 
-    @Size(min = 1, message = "至少要有一个标签")
+    @NotEmpty(message = "至少要有一个标签")
     private List<String> tags;
 }

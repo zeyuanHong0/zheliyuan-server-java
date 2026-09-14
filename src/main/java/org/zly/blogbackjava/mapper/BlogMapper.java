@@ -28,6 +28,10 @@ public interface BlogMapper {
             @Param("isAdmin") boolean isAdmin
     );
 
+    void insertBlog(Blog blog);
+
+    void updateBlog(Blog blog);
+
     List<BlogTagListItem> getTagsByBlogIds(
             @Param("blogIds") List<String> blogIds
     );

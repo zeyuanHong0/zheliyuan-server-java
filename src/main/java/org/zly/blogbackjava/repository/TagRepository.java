@@ -14,6 +14,8 @@ public interface TagRepository {
 
     List<Tag> getAllTags();
 
+    List<Tag> getTagsByIds(List<String> ids);
+
     Tag getTagInfo(String id);
 
     Tag getTagByName(String name);

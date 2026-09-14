@@ -24,6 +24,8 @@ public interface TagMapper {
 
     List<Tag> getAllTags();
 
+    List<Tag> getTagsByIds(@Param("ids") List<String> ids);
+
     Tag getTagById(@Param("id") String id);
 
     Tag getTagByName(@Param("name") String name);

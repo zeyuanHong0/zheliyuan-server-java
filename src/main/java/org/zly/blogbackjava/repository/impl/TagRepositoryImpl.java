@@ -38,6 +38,11 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
+    public List<Tag> getTagsByIds(List<String> ids) {
+        return tagMapper.getTagsByIds(ids);
+    }
+
+    @Override
     public Tag getTagInfo(String id) {
         return tagMapper.getTagById(id);
     }

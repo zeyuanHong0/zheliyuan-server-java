@@ -135,7 +135,7 @@
         AND t.is_delete = 0
     </select>
 
-    <insert id="insertBlog">
+    <insert id="insertBlog" parameterType="org.zly.blogbackjava.entity.Blog">
         INSERT INTO blogs (id, title, description, content, published, categoryId, createUser)
         VALUES (#{id}, #{title}, #{description}, #{content}, #{published}, #{categoryId}, #{createUser})
     </insert>
