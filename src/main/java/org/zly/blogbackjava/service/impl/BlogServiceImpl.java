@@ -1,6 +1,5 @@
 package org.zly.blogbackjava.service.impl;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.zly.blogbackjava.dto.blog.request.BlogPageQueryDto;
@@ -40,7 +39,8 @@ public class BlogServiceImpl implements BlogService {
     public BlogServiceImpl(BlogRepository blogRepository, UserRepository userRepository,
                            BlogTagRepository blogTagRepository,
                            CategoryRepository categoryRepository,
-                           TagRepository tagRepository, AiService aiService) {
+                           TagRepository tagRepository,
+                           AiService aiService) {
         this.blogRepository = blogRepository;
         this.userRepository = userRepository;
         this.blogTagRepository = blogTagRepository;
@@ -138,11 +138,10 @@ public class BlogServiceImpl implements BlogService {
         blog.setCreateUser(user.getId());
         String newId = IdGenerator.generateId();
         blog.setId(newId);
-        blogRepository.save(blog);
+        blogRepository.create(blog);
         for (String tagId : tagIds) {
             blogTagRepository.insert(newId, tagId);
         }
-        String summary = aiService.summarizeBlog(createBlogDto.getContent());
-        System.out.println("AI生成的摘要: " + summary);
+        aiService.summarizeBlogAsync(newId, createBlogDto.getContent());
     }
 }

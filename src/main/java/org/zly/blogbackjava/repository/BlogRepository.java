@@ -10,7 +10,11 @@ import java.util.List;
 
 public interface BlogRepository {
 
-    void save(Blog blog);
+    void create(Blog blog);
+
+    void update(Blog blog);
+
+    void updateAiSummary(String blogId, String aiSummary);
 
     List<BlogPageListItem> getBlogPageList(String title, String categoryId, List<String> tagIds, String userId, boolean isAdmin, Integer offset, Integer pageSize);
 

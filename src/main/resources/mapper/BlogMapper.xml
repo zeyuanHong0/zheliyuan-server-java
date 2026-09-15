@@ -152,4 +152,10 @@
         </set>
         WHERE id = #{id}
     </update>
+
+    <update id="updateAiSummary">
+        UPDATE blogs
+        SET aiSummary = #{aiSummary}
+        WHERE id = #{blogId}
+    </update>
 </mapper>

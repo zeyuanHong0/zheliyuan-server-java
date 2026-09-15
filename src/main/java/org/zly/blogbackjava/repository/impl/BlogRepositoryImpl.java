@@ -21,8 +21,18 @@ public class BlogRepositoryImpl implements BlogRepository {
     }
 
     @Override
-    public void save(Blog blog){
+    public void create(Blog blog){
         blogMapper.insertBlog(blog);
+    }
+
+    @Override
+    public void update(Blog blog){
+        blogMapper.updateBlog(blog);
+    }
+
+    @Override
+    public void updateAiSummary(String blogId, String aiSummary) {
+        blogMapper.updateAiSummary(blogId, aiSummary);
     }
 
     @Override

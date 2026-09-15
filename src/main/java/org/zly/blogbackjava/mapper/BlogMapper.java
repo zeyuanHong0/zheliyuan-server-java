@@ -32,6 +32,9 @@ public interface BlogMapper {
 
     void updateBlog(Blog blog);
 
+    void updateAiSummary(@Param("blogId") String blogId,
+                         @Param("aiSummary") String aiSummary);
+
     List<BlogTagListItem> getTagsByBlogIds(
             @Param("blogIds") List<String> blogIds
     );
