@@ -13,6 +13,7 @@ public class BlogInfoResult {
     private String aiSummary;
     private String content;
     private Integer published;
+    private String createUser;
     private List<TagSimpleItem> tags;
     private BlogCategoryItem category;
 }

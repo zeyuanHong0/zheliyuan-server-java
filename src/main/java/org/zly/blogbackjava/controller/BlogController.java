@@ -8,6 +8,7 @@ import org.zly.blogbackjava.annotation.RequireLogin;
 import org.zly.blogbackjava.common.response.ApiResponse;
 import org.zly.blogbackjava.dto.blog.request.BlogPageQueryDto;
 import org.zly.blogbackjava.dto.blog.request.CreateBlogDto;
+import org.zly.blogbackjava.dto.blog.request.UpdateBlogDto;
 import org.zly.blogbackjava.dto.blog.response.BlogInfoResult;
 import org.zly.blogbackjava.dto.blog.response.BlogPageListResult;
 import org.zly.blogbackjava.entity.User;
@@ -45,7 +46,10 @@ public class BlogController {
     }
 
     @PutMapping("/updateBlog")
-    public void updateBlog(@RequestBody @Valid CreateBlogDto createBlogDto) {
+    public ApiResponse<Void> updateBlog(@RequestBody @Valid UpdateBlogDto updateBlogDto,
+                           @AuthenticationPrincipal User user) {
+        blogService.updateBlog(updateBlogDto, user);
+        return ApiResponse.success("更新成功", null);
     }
 
     @PostMapping("/changeBlogStatus/{id}")

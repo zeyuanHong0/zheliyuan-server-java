@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.zly.blogbackjava.dto.blog.request.BlogPageQueryDto;
 import org.zly.blogbackjava.dto.blog.request.CreateBlogDto;
+import org.zly.blogbackjava.dto.blog.request.UpdateBlogDto;
 import org.zly.blogbackjava.dto.blog.response.BlogInfoResult;
 import org.zly.blogbackjava.dto.blog.response.BlogPageListItem;
 import org.zly.blogbackjava.dto.blog.response.BlogPageListResult;
@@ -22,6 +23,7 @@ import org.zly.blogbackjava.repository.TagRepository;
 import org.zly.blogbackjava.repository.UserRepository;
 import org.zly.blogbackjava.service.AiService;
 import org.zly.blogbackjava.service.BlogService;
+import org.zly.blogbackjava.service.UserService;
 import org.zly.blogbackjava.util.IdGenerator;
 
 import java.util.*;
@@ -35,18 +37,19 @@ public class BlogServiceImpl implements BlogService {
     private final CategoryRepository categoryRepository;
     private final TagRepository tagRepository;
     private final AiService aiService;
+    private final UserService userService;
 
     public BlogServiceImpl(BlogRepository blogRepository, UserRepository userRepository,
                            BlogTagRepository blogTagRepository,
-                           CategoryRepository categoryRepository,
-                           TagRepository tagRepository,
-                           AiService aiService) {
+                           CategoryRepository categoryRepository, TagRepository tagRepository,
+                           AiService aiService, UserService userService) {
         this.blogRepository = blogRepository;
         this.userRepository = userRepository;
         this.blogTagRepository = blogTagRepository;
         this.categoryRepository = categoryRepository;
         this.tagRepository = tagRepository;
         this.aiService = aiService;
+        this.userService = userService;
     }
 
     @Override
@@ -143,5 +146,56 @@ public class BlogServiceImpl implements BlogService {
             blogTagRepository.insert(newId, tagId);
         }
         aiService.summarizeBlogAsync(newId, createBlogDto.getContent());
+    }
+
+    @Override
+    @Transactional
+    public void updateBlog(UpdateBlogDto updateBlogDto, User user) {
+        String id = updateBlogDto.getId();
+        String aiSummary = updateBlogDto.getAiSummary();
+        String categoryId = updateBlogDto.getCategory();
+        List<String> tagIds = updateBlogDto.getTags();
+        // 查询文章
+        BlogInfoResult searchBlog = blogRepository.getBlogInfo(updateBlogDto.getId());
+        boolean isAdmin = userService.isAdmin(user.getId());
+        if (searchBlog == null) {
+            throw new BusinessException(404, "博客不存在");
+        }
+        if (!searchBlog.getCreateUser().equals(user.getId()) && !isAdmin) {
+            throw new BusinessException(403, "没有权限修改该博客");
+        }
+
+        Category category = categoryRepository.getCategoryInfo(categoryId);
+        if (category == null) {
+            throw new BusinessException(404, "分类不存在");
+        }
+        if (new HashSet<>(tagIds).size() != tagIds.size()) {
+            throw new BusinessException(400, "标签不能重复");
+        }
+        List<Tag> tags = tagRepository.getTagsByIds(tagIds);
+        if (tags.size() != tagIds.size()) {
+            throw new BusinessException(404, "部分标签不存在");
+        }
+
+        Blog blog = new Blog();
+        blog.setId(id);
+        blog.setTitle(updateBlogDto.getTitle());
+        blog.setDescription(updateBlogDto.getDescription());
+        blog.setContent(updateBlogDto.getContent());
+        blog.setPublished(updateBlogDto.getPublished());
+        blog.setCategoryId(categoryId);
+        if (aiSummary != null && !aiSummary.isBlank()) {
+            blog.setAiSummary(aiSummary);
+        }
+        blogRepository.update(blog);
+        // 先删除原有的标签关联
+        blogTagRepository.deleteByBlogId(id);
+        for (String tagId : tagIds) {
+            blogTagRepository.insert(id, tagId);
+        }
+        // 如果清空了aiSummary，则重新生成
+        if (aiSummary == null || aiSummary.isBlank()) {
+            aiService.summarizeBlogAsync(id, updateBlogDto.getContent());
+        }
     }
 }

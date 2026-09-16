@@ -10,4 +10,6 @@ public class UpdateBlogDto extends CreateBlogDto{
 
     @NotBlank(message = "id不能为空")
     private String id;
+    
+    private String aiSummary;
 }

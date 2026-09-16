@@ -31,6 +31,7 @@
         <result property="content" column="content"/>
         <result property="published" column="published"/>
         <result property="aiSummary" column="aiSummary"/>
+        <result property="createUser" column="createUser"/>
 
         <association property="category"
                      javaType="org.zly.blogbackjava.dto.blog.response.BlogCategoryItem">
@@ -119,7 +120,7 @@
     </select>
 
     <select id="getBlogById" resultMap="BlogInfoBaseResultMap">
-        SELECT b.id AS blog_id,b.title,b.description,b.content,b.published,b.aiSummary,
+        SELECT b.id AS blog_id,b.title,b.description,b.content,b.published,b.aiSummary,b.createUser,
         c.id AS category_id,c.name AS category_name
         FROM blogs b
         LEFT JOIN category c ON b.categoryId = c.id
