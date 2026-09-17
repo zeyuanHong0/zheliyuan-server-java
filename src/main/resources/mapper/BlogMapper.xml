@@ -159,4 +159,16 @@
         SET aiSummary = #{aiSummary}
         WHERE id = #{blogId}
     </update>
+
+    <update id="changeBlogStatus">
+        UPDATE blogs
+        SET published = #{published}
+        WHERE id = #{blogId}
+    </update>
+
+    <update id="deleteBlog">
+        UPDATE blogs
+        SET is_delete = 1
+        WHERE id = #{blogId}
+    </update>
 </mapper>

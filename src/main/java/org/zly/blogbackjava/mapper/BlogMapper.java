@@ -43,4 +43,7 @@ public interface BlogMapper {
 
     BlogInfoResult getBlogById(@Param("id") String id);
 
+    void changeBlogStatus(@Param("blogId") String blogId, @Param("published") Integer published);
+
+    void deleteBlog(@Param("blogId") String blogId);
 }

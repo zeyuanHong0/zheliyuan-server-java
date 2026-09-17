@@ -16,4 +16,8 @@ public interface BlogService {
     void createBlog(CreateBlogDto createBlogDto, User user);
 
     void updateBlog(UpdateBlogDto updateBlogDto,User user);
+
+    void changeBlogStatus(String blogId, Integer published, User user);
+
+    void deleteBlog(String blogId, User user);
 }

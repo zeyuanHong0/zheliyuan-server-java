@@ -21,12 +21,12 @@ public class BlogRepositoryImpl implements BlogRepository {
     }
 
     @Override
-    public void create(Blog blog){
+    public void create(Blog blog) {
         blogMapper.insertBlog(blog);
     }
 
     @Override
-    public void update(Blog blog){
+    public void update(Blog blog) {
         blogMapper.updateBlog(blog);
     }
 
@@ -36,8 +36,12 @@ public class BlogRepositoryImpl implements BlogRepository {
     }
 
     @Override
-    public List<BlogPageListItem> getBlogPageList(String title, String categoryId, List<String> tagIds, String userId, boolean isAdmin, Integer offset, Integer pageSize) {
-        return blogMapper.getBlogPageList(title, categoryId, tagIds, userId, isAdmin, offset, pageSize);
+    public List<BlogPageListItem> getBlogPageList(String title, String categoryId,
+                                                  List<String> tagIds, String userId,
+                                                  boolean isAdmin, Integer offset,
+                                                  Integer pageSize) {
+        return blogMapper.getBlogPageList(title, categoryId, tagIds, userId, isAdmin, offset,
+                pageSize);
     }
 
     @Override
@@ -51,12 +55,23 @@ public class BlogRepositoryImpl implements BlogRepository {
     }
 
     @Override
-    public Long countBlogPageList(String title, String categoryId, List<String> tagIds, String userId, boolean isAdmin) {
+    public Long countBlogPageList(String title, String categoryId, List<String> tagIds,
+                                  String userId, boolean isAdmin) {
         return blogMapper.countBlogPageList(title, categoryId, tagIds, userId, isAdmin);
     }
 
     @Override
     public BlogInfoResult getBlogInfo(String id) {
         return blogMapper.getBlogById(id);
+    }
+
+    @Override
+    public void changeBlogStatus(String blogId, Integer published) {
+        blogMapper.changeBlogStatus(blogId, published);
+    }
+
+    @Override
+    public void deleteBlog(String blogId) {
+        blogMapper.deleteBlog(blogId);
     }
 }

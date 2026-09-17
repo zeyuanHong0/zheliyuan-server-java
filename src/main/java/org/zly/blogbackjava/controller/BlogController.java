@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.zly.blogbackjava.annotation.RequireLogin;
 import org.zly.blogbackjava.common.response.ApiResponse;
 import org.zly.blogbackjava.dto.blog.request.BlogPageQueryDto;
+import org.zly.blogbackjava.dto.blog.request.ChangeBlogStatusDto;
 import org.zly.blogbackjava.dto.blog.request.CreateBlogDto;
 import org.zly.blogbackjava.dto.blog.request.UpdateBlogDto;
 import org.zly.blogbackjava.dto.blog.response.BlogInfoResult;
@@ -47,16 +48,23 @@ public class BlogController {
 
     @PutMapping("/updateBlog")
     public ApiResponse<Void> updateBlog(@RequestBody @Valid UpdateBlogDto updateBlogDto,
-                           @AuthenticationPrincipal User user) {
+                                        @AuthenticationPrincipal User user) {
         blogService.updateBlog(updateBlogDto, user);
         return ApiResponse.success("更新成功", null);
     }
 
     @PostMapping("/changeBlogStatus/{id}")
-    public void changeBlogStatus(@PathVariable String id) {
+    public ApiResponse<Void> changeBlogStatus(@PathVariable String id,
+                                              @RequestBody @Valid ChangeBlogStatusDto changeBlogStatusDto,
+                                              @AuthenticationPrincipal User user) {
+        blogService.changeBlogStatus(id, changeBlogStatusDto.getPublished(), user);
+        return ApiResponse.success("修改成功", null);
     }
 
     @DeleteMapping("/deleteBlog/{id}")
-    public void deleteBlog(@PathVariable String id) {
+    public ApiResponse<Void> deleteBlog(@PathVariable String id,
+                                        @AuthenticationPrincipal User user) {
+        blogService.deleteBlog(id, user);
+        return ApiResponse.success("删除成功", null);
     }
 }

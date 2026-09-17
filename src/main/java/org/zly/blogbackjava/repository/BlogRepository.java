@@ -25,4 +25,8 @@ public interface BlogRepository {
     Long countBlogPageList(String title, String categoryId, List<String> tagIds, String userId, boolean isAdmin);
 
     BlogInfoResult getBlogInfo(String id);
+
+    void changeBlogStatus(String blogId, Integer published);
+
+    void deleteBlog(String blogId);
 }

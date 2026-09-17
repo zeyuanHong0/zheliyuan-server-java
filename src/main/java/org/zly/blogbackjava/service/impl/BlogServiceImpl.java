@@ -198,4 +198,30 @@ public class BlogServiceImpl implements BlogService {
             aiService.summarizeBlogAsync(id, updateBlogDto.getContent());
         }
     }
+
+    @Override
+    public void changeBlogStatus(String blogId, Integer published, User user) {
+        BlogInfoResult searchBlog = blogRepository.getBlogInfo(blogId);
+        boolean isAdmin = userService.isAdmin(user.getId());
+        if (searchBlog == null) {
+            throw new BusinessException(404, "博客不存在");
+        }
+        if (!searchBlog.getCreateUser().equals(user.getId()) && !isAdmin) {
+            throw new BusinessException(403, "没有权限修改该博客");
+        }
+        blogRepository.changeBlogStatus(blogId, published);
+    }
+
+    @Override
+    public void deleteBlog(String blogId, User user) {
+        BlogInfoResult searchBlog = blogRepository.getBlogInfo(blogId);
+        boolean isAdmin = userService.isAdmin(user.getId());
+        if (searchBlog == null) {
+            throw new BusinessException(404, "博客不存在");
+        }
+        if (!searchBlog.getCreateUser().equals(user.getId()) && !isAdmin) {
+            throw new BusinessException(403, "没有权限删除该博客");
+        }
+        blogRepository.deleteBlog(blogId);
+    }
 }
