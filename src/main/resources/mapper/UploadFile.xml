@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zly.blogbackjava.mapper.UploadFileMapper">
+
+    <insert id="saveFileRecord">
+        INSERT INTO files (id, originalName, filename, mimetype, size, storageType, fileUrl, uploadedBy)
+        VALUES (#{id}, #{originalName}, #{filename}, #{mimeType}, #{size}, #{storageType}, #{fileUrl}, #{uploadedBy})
+    </insert>
+
+</mapper>
