@@ -20,5 +20,7 @@ public interface TagService {
 
     TagInfoResult getTagInfo(String id);
 
+    Integer getTagCount();
+
     List<TagSimpleItem> getAllTagList();
 }

@@ -61,6 +61,16 @@ public class BlogRepositoryImpl implements BlogRepository {
     }
 
     @Override
+    public Integer countBlogs(String createUser) {
+        return blogMapper.countBlogs(createUser);
+    }
+
+    @Override
+    public Integer countPublishedBlogs(String createUser) {
+        return blogMapper.countPublishedBlogs(createUser);
+    }
+
+    @Override
     public BlogInfoResult getBlogInfo(String id) {
         return blogMapper.getBlogById(id);
     }

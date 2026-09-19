@@ -224,4 +224,30 @@ public class BlogServiceImpl implements BlogService {
         }
         blogRepository.deleteBlog(blogId);
     }
+
+    /**
+     * 获取所有博客的数量
+     *
+     * @param user 当前用户
+     * @return 博客总数
+     */
+    @Override
+    public Integer getAllBlogCount(User user) {
+        boolean isAdmin = userService.isAdmin(user.getId());
+        String userId = isAdmin ? null : user.getId();
+        return blogRepository.countBlogs(userId);
+    }
+
+    /**
+     * 获取已发布博客的数量
+     *
+     * @param user 当前用户
+     * @return 已发布博客总数
+     */
+    @Override
+    public Integer getPublishedBlogCount(User user) {
+        boolean isAdmin = userService.isAdmin(user.getId());
+        String userId = isAdmin ? null : user.getId();
+        return blogRepository.countPublishedBlogs(userId);
+    }
 }

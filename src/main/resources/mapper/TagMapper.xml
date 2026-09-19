@@ -61,6 +61,11 @@
         WHERE name = #{name} AND is_delete = 0
     </select>
 
+    <select id="countAllTags" resultType="Integer">
+        SELECT COUNT(*) FROM tags
+        WHERE is_delete = 0
+    </select>
+
     <insert id="insertTag">
         INSERT INTO tags (id, name, icon, icon_dark)
         VALUES (#{id}, #{name}, NULLIF(#{icon}, ''), NULLIF(#{iconDark}, ''))

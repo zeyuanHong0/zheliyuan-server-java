@@ -82,6 +82,11 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    public Integer getTagCount() {
+        return tagRepository.countAllTags();
+    }
+
+    @Override
     public List<TagSimpleItem> getAllTagList() {
         List<Tag> allTags = tagRepository.getAllTags();
         return allTags.stream()

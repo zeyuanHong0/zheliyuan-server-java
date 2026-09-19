@@ -28,6 +28,10 @@ public interface BlogMapper {
             @Param("isAdmin") boolean isAdmin
     );
 
+    Integer countBlogs(@Param("createUser") String createUser);
+
+    Integer countPublishedBlogs(@Param("createUser") String createUser);
+
     void insertBlog(Blog blog);
 
     void updateBlog(Blog blog);

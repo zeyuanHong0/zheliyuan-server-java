@@ -13,6 +13,8 @@ public interface CategoryMapper {
 
     Long countCategoryList(@Param("name") String name);
 
+    Integer countAllCategory();
+
     Category getCategoryById(@Param("id") String id);
 
     void updateCategory(@Param("id") String id, @Param("name") String name, @Param("isDelete") Integer isDelete);

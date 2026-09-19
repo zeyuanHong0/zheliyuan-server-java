@@ -50,6 +50,12 @@
         VALUES (#{id}, #{name})
     </insert>
 
+    <select id="countAllCategory" resultType="Integer">
+        SELECT COUNT(*)
+        FROM category
+        WHERE is_delete = 0
+    </select>
+
     <update id="updateCategory">
         UPDATE category
         <set>

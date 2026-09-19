@@ -22,6 +22,8 @@ public interface TagMapper {
 
     Long countTagList(@Param("name") String name);
 
+    Integer countAllTags();
+
     List<Tag> getAllTags();
 
     List<Tag> getTagsByIds(@Param("ids") List<String> ids);

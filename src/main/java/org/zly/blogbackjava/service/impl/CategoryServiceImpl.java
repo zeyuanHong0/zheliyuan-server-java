@@ -51,6 +51,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public Integer getCategoryCount() {
+        return categoryRepository.countAllCategory();
+    }
+
+    @Override
     public void updateCategory(String id, String name) {
         if (name == null || name.trim().isEmpty()) {
             throw new BusinessException(400, "分类名称不能为空");

@@ -136,6 +136,25 @@
         AND t.is_delete = 0
     </select>
 
+    <select id="countBlogs" resultType="Integer">
+        SELECT COUNT(*)
+        FROM blogs
+        <where>
+            is_delete = 0
+            <if test="createUser != null">AND createUser = #{createUser}</if>
+        </where>
+    </select>
+
+    <select id="countPublishedBlogs" resultType="Integer">
+        SELECT COUNT(*)
+        FROM blogs
+        <where>
+            is_delete = 0
+            AND published = 1
+            <if test="createUser != null">AND createUser = #{createUser}</if>
+        </where>
+    </select>
+
     <insert id="insertBlog" parameterType="org.zly.blogbackjava.entity.Blog">
         INSERT INTO blogs (id, title, description, content, published, categoryId, createUser)
         VALUES (#{id}, #{title}, #{description}, #{content}, #{published}, #{categoryId}, #{createUser})

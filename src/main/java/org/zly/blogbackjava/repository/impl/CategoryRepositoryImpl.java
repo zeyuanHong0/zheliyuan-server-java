@@ -32,6 +32,11 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     }
 
     @Override
+    public Integer countAllCategory() {
+        return categoryMapper.countAllCategory();
+    }
+
+    @Override
     public Category getCategoryInfo(String id) {
         return categoryMapper.getCategoryById(id);
     }

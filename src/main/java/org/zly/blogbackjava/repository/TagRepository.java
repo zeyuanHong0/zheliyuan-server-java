@@ -12,6 +12,8 @@ public interface TagRepository {
 
     Long countTagList(String name);
 
+    Integer countAllTags();
+
     List<Tag> getAllTags();
 
     List<Tag> getTagsByIds(List<String> ids);

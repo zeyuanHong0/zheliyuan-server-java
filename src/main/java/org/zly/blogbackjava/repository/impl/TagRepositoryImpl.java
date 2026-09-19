@@ -33,6 +33,11 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
+    public Integer countAllTags() {
+        return tagMapper.countAllTags();
+    }
+
+    @Override
     public List<Tag> getAllTags() {
         return tagMapper.getAllTags();
     }

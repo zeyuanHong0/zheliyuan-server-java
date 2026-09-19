@@ -20,4 +20,8 @@ public interface BlogService {
     void changeBlogStatus(String blogId, Integer published, User user);
 
     void deleteBlog(String blogId, User user);
+
+    Integer getAllBlogCount(User user);
+
+    Integer getPublishedBlogCount(User user);
 }

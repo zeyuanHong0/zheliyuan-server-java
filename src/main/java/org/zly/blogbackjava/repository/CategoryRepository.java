@@ -11,6 +11,8 @@ public interface CategoryRepository {
 
     Long countCategoryList(String name);
 
+    Integer countAllCategory();
+
     Category getCategoryInfo(String id);
 
     void updateCategory(String id, String name, Integer isDelete);
