@@ -7,6 +7,7 @@ import org.zly.blogbackjava.dto.blog.response.BlogTagListItem;
 import org.zly.blogbackjava.entity.Blog;
 import org.zly.blogbackjava.entity.Tag;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BlogMapper {
@@ -31,6 +32,11 @@ public interface BlogMapper {
     Integer countBlogs(@Param("createUser") String createUser);
 
     Integer countPublishedBlogs(@Param("createUser") String createUser);
+
+    Integer countBlogsByRange(
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate,
+            @Param("createUser") String createUser);
 
     void insertBlog(Blog blog);
 

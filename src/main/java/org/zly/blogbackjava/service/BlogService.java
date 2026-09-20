@@ -7,6 +7,8 @@ import org.zly.blogbackjava.dto.blog.response.BlogInfoResult;
 import org.zly.blogbackjava.dto.blog.response.BlogPageListResult;
 import org.zly.blogbackjava.entity.User;
 
+import java.util.Map;
+
 public interface BlogService {
 
     BlogPageListResult getBlogPageList(BlogPageQueryDto blogPageQueryDto, User user);
@@ -24,4 +26,6 @@ public interface BlogService {
     Integer getAllBlogCount(User user);
 
     Integer getPublishedBlogCount(User user);
+
+    Map<String, Object> getWeeklyAddedBlogCount(User user);
 }

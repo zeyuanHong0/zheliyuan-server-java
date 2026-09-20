@@ -26,6 +26,11 @@ import org.zly.blogbackjava.service.BlogService;
 import org.zly.blogbackjava.service.UserService;
 import org.zly.blogbackjava.util.IdGenerator;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 @Service
@@ -249,5 +254,41 @@ public class BlogServiceImpl implements BlogService {
         boolean isAdmin = userService.isAdmin(user.getId());
         String userId = isAdmin ? null : user.getId();
         return blogRepository.countPublishedBlogs(userId);
+    }
+
+    /**
+     * 获取每周新增博客的数量
+     *
+     * @param user 当前用户
+     * @return 每周新增博客数量的映射
+     */
+    @Override
+    public Map<String, Object> getWeeklyAddedBlogCount(User user) {
+        boolean isAdmin = userService.isAdmin(user.getId());
+        String userId = isAdmin ? null : user.getId();
+
+        LocalDateTime currentWeekStart = LocalDateTime.now()
+                .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+                .toLocalDate()
+                .atStartOfDay();
+        LocalDateTime currentWeekEnd = currentWeekStart.plusWeeks(1);
+        LocalDateTime lastWeekStart = currentWeekStart.minusWeeks(1);
+
+        Integer currentWeekBlogCount = blogRepository.countBlogsByRange(currentWeekStart,
+                currentWeekEnd, userId);
+        Integer lastWeekBlogCount = blogRepository.countBlogsByRange(lastWeekStart,
+                currentWeekStart, userId);
+
+        BigDecimal growthRate = lastWeekBlogCount == 0
+                ? null
+                : BigDecimal.valueOf(
+                        (currentWeekBlogCount - lastWeekBlogCount) * 100.0 / lastWeekBlogCount)
+                .setScale(2, RoundingMode.HALF_UP);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("currentWeekBlogCount", currentWeekBlogCount);
+        result.put("lastWeekBlogCount", lastWeekBlogCount);
+        result.put("growthRate", growthRate);
+        return result;
     }
 }

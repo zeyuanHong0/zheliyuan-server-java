@@ -9,6 +9,7 @@ import org.zly.blogbackjava.entity.Tag;
 import org.zly.blogbackjava.mapper.BlogMapper;
 import org.zly.blogbackjava.repository.BlogRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -68,6 +69,12 @@ public class BlogRepositoryImpl implements BlogRepository {
     @Override
     public Integer countPublishedBlogs(String createUser) {
         return blogMapper.countPublishedBlogs(createUser);
+    }
+
+    @Override
+    public Integer countBlogsByRange(LocalDateTime startDate, LocalDateTime endDate,
+                                     String createUser) {
+        return blogMapper.countBlogsByRange(startDate, endDate, createUser);
     }
 
     @Override
