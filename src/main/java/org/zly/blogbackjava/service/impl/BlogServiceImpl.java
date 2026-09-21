@@ -291,4 +291,16 @@ public class BlogServiceImpl implements BlogService {
         result.put("growthRate", growthRate);
         return result;
     }
+
+    /**
+     * 获取最近7天博客发布趋势
+     *
+     * @param user 当前用户
+     * @return 最近7天博客发布趋势的映射
+     */
+    @Override
+    public Map<String, Object> getLast7DaysBlogPublishTrend(User user) {
+        Map<String, Object> result = new HashMap<>();
+        return result;
+    }
 }

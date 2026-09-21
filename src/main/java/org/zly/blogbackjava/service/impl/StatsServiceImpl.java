@@ -30,5 +30,6 @@ public class StatsServiceImpl implements StatsService {
         Integer tagCount = tagService.getTagCount();
         Integer categoryCount = categoryService.getCategoryCount();
         Map<String, Object> weeklyAddedBlogCount = blogService.getWeeklyAddedBlogCount(user);
+        Map<String, Object> blogPublishTrend = blogService.getLast7DaysBlogPublishTrend(user);
     }
 }

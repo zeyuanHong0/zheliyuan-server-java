@@ -28,4 +28,6 @@ public interface BlogService {
     Integer getPublishedBlogCount(User user);
 
     Map<String, Object> getWeeklyAddedBlogCount(User user);
+
+    Map<String, Object> getLast7DaysBlogPublishTrend(User user);
 }
