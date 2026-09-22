@@ -8,6 +8,7 @@ import org.zly.blogbackjava.entity.Tag;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public interface BlogRepository {
 
@@ -29,7 +30,10 @@ public interface BlogRepository {
 
     Integer countPublishedBlogs(String createUser);
 
-    Integer countBlogsByRange(LocalDateTime startDate, LocalDateTime endDate, String createUser);
+    Long countBlogsByRange(LocalDateTime startTime, LocalDateTime endTime, String createUser);
+
+    List<Map<String, Object>> countPublishedBlogsByDate(
+            LocalDateTime startTime, LocalDateTime endTime, String createUser);
 
     BlogInfoResult getBlogInfo(String id);
 

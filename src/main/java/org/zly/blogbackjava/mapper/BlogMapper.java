@@ -9,6 +9,7 @@ import org.zly.blogbackjava.entity.Tag;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public interface BlogMapper {
     List<BlogPageListItem> getBlogPageList(
@@ -33,9 +34,14 @@ public interface BlogMapper {
 
     Integer countPublishedBlogs(@Param("createUser") String createUser);
 
-    Integer countBlogsByRange(
-            @Param("startDate") LocalDateTime startDate,
-            @Param("endDate") LocalDateTime endDate,
+    Long countBlogsByRange(
+            @Param("startTime") LocalDateTime startTime,
+            @Param("endTime") LocalDateTime endTime,
+            @Param("createUser") String createUser);
+
+    List<Map<String, Object>> countPublishedBlogsByDate(
+            @Param("startTime") LocalDateTime startTime,
+            @Param("endTime") LocalDateTime endTime,
             @Param("createUser") String createUser);
 
     void insertBlog(Blog blog);

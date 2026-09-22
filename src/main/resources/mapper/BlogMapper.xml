@@ -155,7 +155,7 @@
         </where>
     </select>
 
-    <select id="countBlogsByRange" resultType="Integer">
+    <select id="countBlogsByRange" resultType="java.lang.Long">
         SELECT COUNT(*)
         FROM blogs
         <where>
@@ -165,6 +165,20 @@
             AND createTime <![CDATA[ < ]]> #{endTime}
             <if test="createUser != null">AND createUser = #{createUser}</if>
         </where>
+    </select>
+
+    <select id="countPublishedBlogsByDate" resultType="map">
+        SELECT DATE(createTime) AS date, COUNT(*) AS count
+        FROM blogs
+        <where>
+            is_delete = 0
+            AND published = 1
+            AND createTime <![CDATA[ >= ]]> #{startTime}
+            AND createTime <![CDATA[ < ]]> #{endTime}
+            <if test="createUser != null">AND createUser = #{createUser}</if>
+        </where>
+        GROUP BY DATE(createTime)
+        ORDER BY DATE(createTime) ASC
     </select>
 
     <insert id="insertBlog" parameterType="org.zly.blogbackjava.entity.Blog">

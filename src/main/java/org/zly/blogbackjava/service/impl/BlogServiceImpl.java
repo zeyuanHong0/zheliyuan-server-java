@@ -29,7 +29,9 @@ import org.zly.blogbackjava.util.IdGenerator;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
@@ -274,9 +276,9 @@ public class BlogServiceImpl implements BlogService {
         LocalDateTime currentWeekEnd = currentWeekStart.plusWeeks(1);
         LocalDateTime lastWeekStart = currentWeekStart.minusWeeks(1);
 
-        Integer currentWeekBlogCount = blogRepository.countBlogsByRange(currentWeekStart,
+        Long currentWeekBlogCount = blogRepository.countBlogsByRange(currentWeekStart,
                 currentWeekEnd, userId);
-        Integer lastWeekBlogCount = blogRepository.countBlogsByRange(lastWeekStart,
+        Long lastWeekBlogCount = blogRepository.countBlogsByRange(lastWeekStart,
                 currentWeekStart, userId);
 
         BigDecimal growthRate = lastWeekBlogCount == 0
@@ -300,7 +302,34 @@ public class BlogServiceImpl implements BlogService {
      */
     @Override
     public Map<String, Object> getLast7DaysBlogPublishTrend(User user) {
-        Map<String, Object> result = new HashMap<>();
-        return result;
+        boolean isAdmin = userService.isAdmin(user.getId());
+        String userId = isAdmin ? null : user.getId();
+
+        LocalDate startDate = LocalDate.now().minusDays(6);
+        LocalDateTime startTime = startDate.atStartOfDay();
+        LocalDateTime endTime = LocalDate.now().plusDays(1).atStartOfDay();
+        List<Map<String, Object>> trendRaw = blogRepository.countPublishedBlogsByDate(
+                startTime, endTime, userId);
+
+        Map<String, Long> trendMap = new HashMap<>();
+        for (Map<String, Object> row : trendRaw) {
+            String date = row.get("date").toString();
+            long count = ((Number) row.get("count")).longValue();
+            trendMap.put(date, count);
+        }
+
+        List<String> dateList = new ArrayList<>();
+        List<Long> data = new ArrayList<>();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM-dd");
+        for (int i = 0; i < 7; i++) {
+            LocalDate date = startDate.plusDays(i);
+            dateList.add(date.format(dateFormatter));
+            data.add(trendMap.getOrDefault(date.toString(), 0L));
+        }
+
+        return Map.of(
+                "dateList", dateList,
+                "data", data
+        );
     }
 }

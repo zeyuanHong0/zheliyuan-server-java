@@ -11,6 +11,7 @@ import org.zly.blogbackjava.repository.BlogRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class BlogRepositoryImpl implements BlogRepository {
@@ -72,9 +73,16 @@ public class BlogRepositoryImpl implements BlogRepository {
     }
 
     @Override
-    public Integer countBlogsByRange(LocalDateTime startDate, LocalDateTime endDate,
-                                     String createUser) {
-        return blogMapper.countBlogsByRange(startDate, endDate, createUser);
+    public Long countBlogsByRange(LocalDateTime startTime, LocalDateTime endTime,
+                                  String createUser) {
+        return blogMapper.countBlogsByRange(startTime, endTime, createUser);
+    }
+
+    @Override
+    public List<Map<String, Object>> countPublishedBlogsByDate(LocalDateTime startTime,
+                                                                LocalDateTime endTime,
+                                                                String createUser) {
+        return blogMapper.countPublishedBlogsByDate(startTime, endTime, createUser);
     }
 
     @Override
