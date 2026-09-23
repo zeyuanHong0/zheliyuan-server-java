@@ -35,6 +35,8 @@ public interface BlogRepository {
     List<Map<String, Object>> countPublishedBlogsByDate(
             LocalDateTime startTime, LocalDateTime endTime, String createUser);
 
+    List<Map<String, Object>> getCategoryDistribution(String createUser);
+
     BlogInfoResult getBlogInfo(String id);
 
     void changeBlogStatus(String blogId, Integer published);

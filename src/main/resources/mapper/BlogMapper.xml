@@ -181,6 +181,18 @@
         ORDER BY DATE(createTime) ASC
     </select>
 
+    <select id="getCategoryDistribution" resultType="map">
+        SELECT c.name AS categoryName, COUNT(b.id) AS count
+        FROM blogs b
+        LEFT JOIN category c ON b.categoryId = c.id
+        <where>
+            b.is_delete = 0
+            AND b.published = 1
+            <if test="createUser != null">AND b.createUser = #{createUser}</if>
+        </where>
+        GROUP BY c.id, c.name
+    </select>
+
     <insert id="insertBlog" parameterType="org.zly.blogbackjava.entity.Blog">
         INSERT INTO blogs (id, title, description, content, published, categoryId, createUser)
         VALUES (#{id}, #{title}, #{description}, #{content}, #{published}, #{categoryId}, #{createUser})

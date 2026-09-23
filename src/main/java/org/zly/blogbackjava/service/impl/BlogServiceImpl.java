@@ -332,4 +332,22 @@ public class BlogServiceImpl implements BlogService {
                 "data", data
         );
     }
+
+    @Override
+    public List<Map<String, Object>> getCategoryDistribution(User user) {
+        boolean isAdmin = userService.isAdmin(user.getId());
+        String userId = isAdmin ? null : user.getId();
+
+        List<Map<String, Object>> raw = blogRepository.getCategoryDistribution(userId);
+        List<Map<String, Object>> result = new ArrayList<>();
+        if (raw != null) {
+            for (Map<String, Object> row : raw) {
+                result.add(Map.of(
+                        "name", row.get("categoryName").toString(),
+                        "value", ((Number) row.get("count")).longValue()
+                ));
+            }
+        }
+        return result;
+    }
 }

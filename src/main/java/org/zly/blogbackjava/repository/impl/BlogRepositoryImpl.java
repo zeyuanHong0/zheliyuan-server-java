@@ -86,6 +86,11 @@ public class BlogRepositoryImpl implements BlogRepository {
     }
 
     @Override
+    public List<Map<String, Object>> getCategoryDistribution(String createUser) {
+        return blogMapper.getCategoryDistribution(createUser);
+    }
+
+    @Override
     public BlogInfoResult getBlogInfo(String id) {
         return blogMapper.getBlogById(id);
     }

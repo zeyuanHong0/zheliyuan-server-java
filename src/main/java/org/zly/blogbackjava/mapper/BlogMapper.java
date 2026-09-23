@@ -44,6 +44,8 @@ public interface BlogMapper {
             @Param("endTime") LocalDateTime endTime,
             @Param("createUser") String createUser);
 
+    List<Map<String, Object>> getCategoryDistribution(@Param("createUser") String createUser);
+
     void insertBlog(Blog blog);
 
     void updateBlog(Blog blog);

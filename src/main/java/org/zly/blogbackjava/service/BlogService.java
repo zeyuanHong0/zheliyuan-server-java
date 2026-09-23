@@ -7,6 +7,7 @@ import org.zly.blogbackjava.dto.blog.response.BlogInfoResult;
 import org.zly.blogbackjava.dto.blog.response.BlogPageListResult;
 import org.zly.blogbackjava.entity.User;
 
+import java.util.List;
 import java.util.Map;
 
 public interface BlogService {
@@ -17,7 +18,7 @@ public interface BlogService {
 
     void createBlog(CreateBlogDto createBlogDto, User user);
 
-    void updateBlog(UpdateBlogDto updateBlogDto,User user);
+    void updateBlog(UpdateBlogDto updateBlogDto, User user);
 
     void changeBlogStatus(String blogId, Integer published, User user);
 
@@ -30,4 +31,6 @@ public interface BlogService {
     Map<String, Object> getWeeklyAddedBlogCount(User user);
 
     Map<String, Object> getLast7DaysBlogPublishTrend(User user);
+
+    List<Map<String, Object>> getCategoryDistribution(User user);
 }

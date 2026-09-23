@@ -7,6 +7,7 @@ import org.zly.blogbackjava.service.CategoryService;
 import org.zly.blogbackjava.service.StatsService;
 import org.zly.blogbackjava.service.TagService;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -31,5 +32,6 @@ public class StatsServiceImpl implements StatsService {
         Integer categoryCount = categoryService.getCategoryCount();
         Map<String, Object> weeklyAddedBlogCount = blogService.getWeeklyAddedBlogCount(user);
         Map<String, Object> blogPublishTrend = blogService.getLast7DaysBlogPublishTrend(user);
+        List<Map<String, Object>> categoryDistribution = blogService.getCategoryDistribution(user);
     }
 }
