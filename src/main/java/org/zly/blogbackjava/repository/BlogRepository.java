@@ -37,6 +37,8 @@ public interface BlogRepository {
 
     List<Map<String, Object>> getCategoryDistribution(String createUser);
 
+    List<Map<String, Object>> getTopTags(String createUser, Integer limit);
+
     BlogInfoResult getBlogInfo(String id);
 
     void changeBlogStatus(String blogId, Integer published);

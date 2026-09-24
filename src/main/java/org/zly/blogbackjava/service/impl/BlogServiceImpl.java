@@ -350,4 +350,22 @@ public class BlogServiceImpl implements BlogService {
         }
         return result;
     }
+
+    @Override
+    public List<Map<String, Object>> getTop5Tags(User user) {
+        boolean isAdmin = userService.isAdmin(user.getId());
+        String userId = isAdmin ? null : user.getId();
+
+        List<Map<String, Object>> raw = blogRepository.getTopTags(userId, 5);
+        List<Map<String, Object>> result = new ArrayList<>();
+        if (raw != null) {
+            for (Map<String, Object> row : raw) {
+                result.add(Map.of(
+                        "name", row.get("tagName").toString(),
+                        "value", ((Number) row.get("count")).longValue()
+                ));
+            }
+        }
+        return result;
+    }
 }

@@ -33,4 +33,6 @@ public interface BlogService {
     Map<String, Object> getLast7DaysBlogPublishTrend(User user);
 
     List<Map<String, Object>> getCategoryDistribution(User user);
+
+    List<Map<String, Object>> getTop5Tags(User user);
 }

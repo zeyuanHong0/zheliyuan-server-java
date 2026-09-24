@@ -193,6 +193,22 @@
         GROUP BY c.id, c.name
     </select>
 
+    <select id="getTopTags" resultType="map">
+        SELECT t.name AS tagName, COUNT(bt.blogId) AS count
+        FROM blogs b
+        INNER JOIN blog_tags bt ON bt.blogId = b.id
+        INNER JOIN tags t ON t.id = bt.tagId
+        <where>
+            b.is_delete = 0
+            AND b.published = 1
+            AND t.is_delete = 0
+            <if test="createUser != null">AND b.createUser = #{createUser}</if>
+        </where>
+        GROUP BY t.id, t.name
+        ORDER BY count DESC, t.id ASC
+        LIMIT #{limit}
+    </select>
+
     <insert id="insertBlog" parameterType="org.zly.blogbackjava.entity.Blog">
         INSERT INTO blogs (id, title, description, content, published, categoryId, createUser)
         VALUES (#{id}, #{title}, #{description}, #{content}, #{published}, #{categoryId}, #{createUser})

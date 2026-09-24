@@ -46,6 +46,9 @@ public interface BlogMapper {
 
     List<Map<String, Object>> getCategoryDistribution(@Param("createUser") String createUser);
 
+    List<Map<String, Object>> getTopTags(@Param("createUser") String createUser,
+                                         @Param("limit") Integer limit);
+
     void insertBlog(Blog blog);
 
     void updateBlog(Blog blog);

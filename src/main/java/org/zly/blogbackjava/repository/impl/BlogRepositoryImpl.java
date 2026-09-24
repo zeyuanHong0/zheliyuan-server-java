@@ -91,6 +91,11 @@ public class BlogRepositoryImpl implements BlogRepository {
     }
 
     @Override
+    public List<Map<String, Object>> getTopTags(String createUser, Integer limit) {
+        return blogMapper.getTopTags(createUser, limit);
+    }
+
+    @Override
     public BlogInfoResult getBlogInfo(String id) {
         return blogMapper.getBlogById(id);
     }

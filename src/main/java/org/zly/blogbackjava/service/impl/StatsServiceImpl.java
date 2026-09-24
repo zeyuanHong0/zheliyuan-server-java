@@ -25,7 +25,7 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public void getDashboardStats(User user) {
+    public Map<String, Object> getDashboardStats(User user) {
         Integer allBlogCount = blogService.getAllBlogCount(user);
         Integer publishedBlogCount = blogService.getPublishedBlogCount(user);
         Integer tagCount = tagService.getTagCount();
@@ -33,5 +33,17 @@ public class StatsServiceImpl implements StatsService {
         Map<String, Object> weeklyAddedBlogCount = blogService.getWeeklyAddedBlogCount(user);
         Map<String, Object> blogPublishTrend = blogService.getLast7DaysBlogPublishTrend(user);
         List<Map<String, Object>> categoryDistribution = blogService.getCategoryDistribution(user);
+        List<Map<String, Object>> tagDistribution = blogService.getTop5Tags(user);
+
+        return Map.of(
+                "allBlogCount", allBlogCount,
+                "publishedBlogCount", publishedBlogCount,
+                "tagCount", tagCount,
+                "categoryCount", categoryCount,
+                "weeklyAddedBlogCount", weeklyAddedBlogCount,
+                "blogPublishTrend", blogPublishTrend,
+                "categoryDistribution", categoryDistribution,
+                "tagDistribution", tagDistribution
+        );
     }
 }

@@ -9,6 +9,8 @@ import org.zly.blogbackjava.common.response.ApiResponse;
 import org.zly.blogbackjava.entity.User;
 import org.zly.blogbackjava.service.StatsService;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/stats")
 @RequireLogin
@@ -21,8 +23,8 @@ public class StatsDashboardController {
     }
 
     @GetMapping("/dashboard")
-    public ApiResponse<Void> getDashboardStats(@AuthenticationPrincipal User user) {
-        statsService.getDashboardStats(user);
-        return ApiResponse.success("获取成功", null);
+    public ApiResponse<Map<String, Object>> getDashboardStats(@AuthenticationPrincipal User user) {
+        Map<String, Object> stats = statsService.getDashboardStats(user);
+        return ApiResponse.success("获取成功", stats);
     }
 }
