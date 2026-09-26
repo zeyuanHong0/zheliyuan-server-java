@@ -1,6 +1,7 @@
 package org.zly.blogbackjava.repository.impl;
 
 import org.springframework.stereotype.Component;
+import org.zly.blogbackjava.dto.blog.response.BlogFrontInfo;
 import org.zly.blogbackjava.dto.blog.response.BlogInfoResult;
 import org.zly.blogbackjava.dto.blog.response.BlogPageListItem;
 import org.zly.blogbackjava.dto.blog.response.BlogTagListItem;
@@ -108,5 +109,10 @@ public class BlogRepositoryImpl implements BlogRepository {
     @Override
     public void deleteBlog(String blogId) {
         blogMapper.deleteBlog(blogId);
+    }
+
+    @Override
+    public BlogFrontInfo getFrontInfo(String id) {
+        return blogMapper.getFrontInfo(id);
     }
 }

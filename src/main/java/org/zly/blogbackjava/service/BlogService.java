@@ -3,6 +3,7 @@ package org.zly.blogbackjava.service;
 import org.zly.blogbackjava.dto.blog.request.BlogPageQueryDto;
 import org.zly.blogbackjava.dto.blog.request.CreateBlogDto;
 import org.zly.blogbackjava.dto.blog.request.UpdateBlogDto;
+import org.zly.blogbackjava.dto.blog.response.BlogFrontInfo;
 import org.zly.blogbackjava.dto.blog.response.BlogInfoResult;
 import org.zly.blogbackjava.dto.blog.response.BlogPageListResult;
 import org.zly.blogbackjava.entity.User;
@@ -35,4 +36,6 @@ public interface BlogService {
     List<Map<String, Object>> getCategoryDistribution(User user);
 
     List<Map<String, Object>> getTop5Tags(User user);
+
+    BlogFrontInfo getFrontInfo(String id);
 }

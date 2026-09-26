@@ -1,6 +1,7 @@
 package org.zly.blogbackjava.mapper;
 
 import org.apache.ibatis.annotations.Param;
+import org.zly.blogbackjava.dto.blog.response.BlogFrontInfo;
 import org.zly.blogbackjava.dto.blog.response.BlogInfoResult;
 import org.zly.blogbackjava.dto.blog.response.BlogPageListItem;
 import org.zly.blogbackjava.dto.blog.response.BlogTagListItem;
@@ -67,4 +68,6 @@ public interface BlogMapper {
     void changeBlogStatus(@Param("blogId") String blogId, @Param("published") Integer published);
 
     void deleteBlog(@Param("blogId") String blogId);
+
+    BlogFrontInfo getFrontInfo(@Param("blogId") String blogId);
 }

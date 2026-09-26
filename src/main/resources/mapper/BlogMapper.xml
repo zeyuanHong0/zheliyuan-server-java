@@ -40,6 +40,37 @@
         </association>
     </resultMap>
 
+    <resultMap id="BlogFrontInfoResultMap" type="org.zly.blogbackjava.dto.blog.response.BlogFrontInfo">
+        <id property="id" column="blogId"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="content" column="content"/>
+        <result property="aiSummary" column="aiSummary"/>
+        <result property="createTime" column="createTime"/>
+        <result property="updateTime" column="updateTime"/>
+
+        <association property="category"
+                     javaType="org.zly.blogbackjava.dto.blog.response.BlogFrontInfo$SimpleItem">
+            <id property="id" column="categoryId"/>
+            <result property="name" column="categoryName"/>
+        </association>
+
+        <association property="author"
+                     javaType="org.zly.blogbackjava.dto.blog.response.BlogFrontInfo$SimpleItem">
+            <id property="id" column="authorId"/>
+            <result property="name" column="authorName"/>
+        </association>
+
+        <collection property="tags"
+                    javaType="list"
+                    ofType="org.zly.blogbackjava.dto.blog.response.BlogFrontInfo$TagItem">
+            <id property="id" column="tagId"/>
+            <result property="name" column="tagName"/>
+            <result property="icon" column="icon"/>
+            <result property="icon_dark" column="icon_dark"/>
+        </collection>
+    </resultMap>
+
 
     <select id="getBlogPageList" resultMap="BlogResultMap">
         SELECT
@@ -207,6 +238,22 @@
         GROUP BY t.id, t.name
         ORDER BY count DESC, t.id ASC
         LIMIT #{limit}
+    </select>
+
+    <select id="getFrontInfo" resultMap="BlogFrontInfoResultMap">
+        SELECT b.id AS blogId, b.title, b.description, b.content, b.aiSummary, b.createTime, b.updateTime,
+        c.id AS categoryId, c.name AS categoryName,
+        t.id AS tagId,t.name AS tagName,t.icon,t.icon_dark,
+        u.id AS authorId, u.username AS authorName
+        FROM blogs b
+        LEFT JOIN category c ON c.id = b.categoryId
+        LEFT JOIN users u ON u.id = b.createUser
+        LEFT JOIN blog_tags bt ON bt.blogId = b.id
+        LEFT JOIN tags t ON t.id = bt.tagId
+        <where>
+            b.is_delete = 0
+            AND b.id = #{blogId}
+        </where>
     </select>
 
     <insert id="insertBlog" parameterType="org.zly.blogbackjava.entity.Blog">

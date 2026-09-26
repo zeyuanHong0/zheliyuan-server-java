@@ -5,10 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.zly.blogbackjava.dto.blog.request.BlogPageQueryDto;
 import org.zly.blogbackjava.dto.blog.request.CreateBlogDto;
 import org.zly.blogbackjava.dto.blog.request.UpdateBlogDto;
-import org.zly.blogbackjava.dto.blog.response.BlogInfoResult;
-import org.zly.blogbackjava.dto.blog.response.BlogPageListItem;
-import org.zly.blogbackjava.dto.blog.response.BlogPageListResult;
-import org.zly.blogbackjava.dto.blog.response.BlogTagListItem;
+import org.zly.blogbackjava.dto.blog.response.*;
 import org.zly.blogbackjava.dto.tag.response.TagSimpleItem;
 import org.zly.blogbackjava.entity.Blog;
 import org.zly.blogbackjava.entity.Category;
@@ -367,5 +364,14 @@ public class BlogServiceImpl implements BlogService {
             }
         }
         return result;
+    }
+
+    @Override
+    public BlogFrontInfo getFrontInfo(String id) {
+        BlogFrontInfo info = blogRepository.getFrontInfo(id);
+        if (info == null) {
+            throw new BusinessException(404, "博客不存在");
+        }
+        return info;
     }
 }
