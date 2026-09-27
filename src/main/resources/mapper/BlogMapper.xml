@@ -71,6 +71,32 @@
         </collection>
     </resultMap>
 
+    <resultMap id="AllBlogsResultMap" type="org.zly.blogbackjava.dto.blog.response.AllBlogsResult">
+        <id property="id" column="blogId"/>
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="createTime" column="createTime"/>
+
+        <association property="category"
+                     javaType="org.zly.blogbackjava.dto.blog.response.AllBlogsResult$SimpleItem">
+            <id property="id" column="categoryId"/>
+            <result property="name" column="categoryName"/>
+        </association>
+
+        <association property="author"
+                     javaType="org.zly.blogbackjava.dto.blog.response.AllBlogsResult$SimpleItem">
+            <id property="id" column="authorId"/>
+            <result property="name" column="authorName"/>
+        </association>
+
+        <collection property="tags"
+                    javaType="list"
+                    ofType="org.zly.blogbackjava.dto.blog.response.AllBlogsResult$SimpleItem">
+            <id property="id" column="tagId"/>
+            <result property="name" column="tagName"/>
+        </collection>
+    </resultMap>
+
 
     <select id="getBlogPageList" resultMap="BlogResultMap">
         SELECT
@@ -254,6 +280,23 @@
             b.is_delete = 0
             AND b.id = #{blogId}
         </where>
+    </select>
+
+    <select id="getAllBlogs" resultMap="AllBlogsResultMap">
+        SELECT b.id AS blogId, b.title, b.description, b.createTime,
+        c.id AS categoryId, c.name AS categoryName,
+        t.id AS tagId,t.name AS tagName,
+        u.id AS authorId, u.username AS authorName
+        FROM blogs b
+        LEFT JOIN category c ON c.id = b.categoryId
+        LEFT JOIN users u ON u.id = b.createUser
+        LEFT JOIN blog_tags bt ON bt.blogId = b.id
+        LEFT JOIN tags t ON t.id = bt.tagId
+        <where>
+            b.is_delete = 0
+            AND b.published = 1
+        </where>
+        ORDER BY b.createTime DESC, b.id DESC
     </select>
 
     <insert id="insertBlog" parameterType="org.zly.blogbackjava.entity.Blog">
