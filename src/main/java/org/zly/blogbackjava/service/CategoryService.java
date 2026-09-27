@@ -1,9 +1,6 @@
 package org.zly.blogbackjava.service;
 
-import org.zly.blogbackjava.dto.category.response.CategoryFrontListItem;
-import org.zly.blogbackjava.dto.category.response.CategoryInfoResult;
-import org.zly.blogbackjava.dto.category.response.CategoryListResult;
-import org.zly.blogbackjava.dto.category.response.CategoryPageListResult;
+import org.zly.blogbackjava.dto.category.response.*;
 
 import java.util.List;
 
@@ -24,4 +21,6 @@ public interface CategoryService {
     List<CategoryListResult> getAllCategoryList();
 
     List<CategoryFrontListItem> getAllCategoryFrontList();
+
+    CategoryFrontInfo getCategoryFrontInfo(String id);
 }

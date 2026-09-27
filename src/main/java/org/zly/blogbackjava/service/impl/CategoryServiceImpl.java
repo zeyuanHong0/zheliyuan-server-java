@@ -85,4 +85,13 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryFrontListItem> getAllCategoryFrontList() {
         return categoryRepository.getAllCategoryFrontList();
     }
+
+    @Override
+    public CategoryFrontInfo getCategoryFrontInfo(String id) {
+        CategoryFrontInfo categoryInfo = categoryRepository.getCategoryFrontInfo(id);
+        if (categoryInfo == null) {
+            throw new BusinessException(404, "分类不存在");
+        }
+        return categoryInfo;
+    }
 }

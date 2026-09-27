@@ -11,6 +11,34 @@
         <result property="isDelete" column="is_delete"/>
     </resultMap>
 
+    <resultMap id="CategoryFrontInfoResultMap" type="org.zly.blogbackjava.dto.category.response.CategoryFrontInfo">
+        <id property="id" column="categoryId"/>
+        <result property="name" column="categoryName"/>
+
+        <collection property="blogs"
+                    javaType="list"
+                    ofType="org.zly.blogbackjava.dto.category.response.CategoryFrontInfo$BlogItem">
+            <id property="id" column="blogId"/>
+            <result property="title" column="title"/>
+            <result property="description" column="description"/>
+            <result property="createTime" column="createTime"/>
+            <result property="updateTime" column="updateTime"/>
+
+            <association property="author"
+                         javaType="org.zly.blogbackjava.dto.category.response.CategoryFrontInfo$SimpleItem">
+                <id property="id" column="authorId"/>
+                <result property="name" column="authorName"/>
+            </association>
+
+            <collection property="tags"
+                        javaType="list"
+                        ofType="org.zly.blogbackjava.dto.category.response.CategoryFrontInfo$SimpleItem">
+                <id property="id" column="tagId"/>
+                <result property="name" column="tagName"/>
+            </collection>
+        </collection>
+    </resultMap>
+
     <select id="getCategoryListByPage" resultMap="CategoryResultMap">
         SELECT * FROM category
         <where>
@@ -52,6 +80,20 @@
         WHERE c.is_delete = 0
         GROUP BY c.id, c.name
         ORDER BY c.createTime DESC, c.id DESC
+    </select>
+
+    <select id="getCategoryFrontInfo" resultMap="CategoryFrontInfoResultMap">
+        SELECT c.id AS categoryId, c.name AS categoryName,
+        b.id AS blogId, b.title, b.description, b.createTime, b.updateTime,
+        u.id AS authorId, u.username AS authorName,
+        t.id AS tagId, t.name AS tagName
+        FROM category c
+        LEFT JOIN blogs b ON b.categoryId = c.id AND b.is_delete = 0 AND b.published = 1
+        LEFT JOIN users u ON u.id = b.createUser
+        LEFT JOIN blog_tags bt ON bt.blogId = b.id
+        LEFT JOIN tags t ON t.id = bt.tagId AND t.is_delete = 0
+        WHERE c.id = #{categoryId} AND c.is_delete = 0
+        ORDER BY b.createTime DESC, b.id DESC
     </select>
 
     <insert id="insertCategory">

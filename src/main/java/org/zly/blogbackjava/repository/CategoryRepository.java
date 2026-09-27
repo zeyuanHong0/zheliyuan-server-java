@@ -1,5 +1,6 @@
 package org.zly.blogbackjava.repository;
 
+import org.zly.blogbackjava.dto.category.response.CategoryFrontInfo;
 import org.zly.blogbackjava.dto.category.response.CategoryFrontListItem;
 import org.zly.blogbackjava.entity.Category;
 
@@ -21,4 +22,6 @@ public interface CategoryRepository {
     List<Category> getAllCategoryList();
 
     List<CategoryFrontListItem> getAllCategoryFrontList();
+
+    CategoryFrontInfo getCategoryFrontInfo(String id);
 }
