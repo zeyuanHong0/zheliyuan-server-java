@@ -1,6 +1,7 @@
 package org.zly.blogbackjava.mapper;
 
 import org.apache.ibatis.annotations.Param;
+import org.zly.blogbackjava.dto.category.response.CategoryFrontListItem;
 import org.zly.blogbackjava.entity.Category;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface CategoryMapper {
     void updateCategory(@Param("id") String id, @Param("name") String name, @Param("isDelete") Integer isDelete);
 
     List<Category> getAllCategoryList();
+
+    List<CategoryFrontListItem> getAllCategoryFrontList();
 }

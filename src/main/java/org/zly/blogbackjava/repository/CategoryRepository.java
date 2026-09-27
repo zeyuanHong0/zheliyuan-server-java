@@ -1,5 +1,6 @@
 package org.zly.blogbackjava.repository;
 
+import org.zly.blogbackjava.dto.category.response.CategoryFrontListItem;
 import org.zly.blogbackjava.entity.Category;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface CategoryRepository {
     void updateCategory(String id, String name, Integer isDelete);
 
     List<Category> getAllCategoryList();
+
+    List<CategoryFrontListItem> getAllCategoryFrontList();
 }

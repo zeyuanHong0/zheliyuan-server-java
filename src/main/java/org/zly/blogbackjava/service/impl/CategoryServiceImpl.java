@@ -2,10 +2,7 @@ package org.zly.blogbackjava.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.zly.blogbackjava.dto.category.response.CategoryInfoResult;
-import org.zly.blogbackjava.dto.category.response.CategoryListResult;
-import org.zly.blogbackjava.dto.category.response.CategoryPageListItem;
-import org.zly.blogbackjava.dto.category.response.CategoryPageListResult;
+import org.zly.blogbackjava.dto.category.response.*;
 import org.zly.blogbackjava.entity.Category;
 import org.zly.blogbackjava.exception.BusinessException;
 import org.zly.blogbackjava.repository.CategoryRepository;
@@ -82,5 +79,10 @@ public class CategoryServiceImpl implements CategoryService {
         return categories.stream()
                 .map(category -> new CategoryListResult(category.getId(), category.getName()))
                 .toList();
+    }
+
+    @Override
+    public List<CategoryFrontListItem> getAllCategoryFrontList() {
+        return categoryRepository.getAllCategoryFrontList();
     }
 }

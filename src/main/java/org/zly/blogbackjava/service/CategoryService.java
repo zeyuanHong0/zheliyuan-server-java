@@ -1,9 +1,9 @@
 package org.zly.blogbackjava.service;
 
+import org.zly.blogbackjava.dto.category.response.CategoryFrontListItem;
 import org.zly.blogbackjava.dto.category.response.CategoryInfoResult;
 import org.zly.blogbackjava.dto.category.response.CategoryListResult;
 import org.zly.blogbackjava.dto.category.response.CategoryPageListResult;
-import org.zly.blogbackjava.entity.Category;
 
 import java.util.List;
 
@@ -22,4 +22,6 @@ public interface CategoryService {
     void deleteCategory(String id);
 
     List<CategoryListResult> getAllCategoryList();
+
+    List<CategoryFrontListItem> getAllCategoryFrontList();
 }

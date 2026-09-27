@@ -1,6 +1,7 @@
 package org.zly.blogbackjava.repository.impl;
 
 import org.springframework.stereotype.Component;
+import org.zly.blogbackjava.dto.category.response.CategoryFrontListItem;
 import org.zly.blogbackjava.entity.Category;
 import org.zly.blogbackjava.mapper.CategoryMapper;
 import org.zly.blogbackjava.repository.CategoryRepository;
@@ -49,5 +50,10 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     @Override
     public List<Category> getAllCategoryList() {
         return categoryMapper.getAllCategoryList();
+    }
+
+    @Override
+    public List<CategoryFrontListItem> getAllCategoryFrontList() {
+        return categoryMapper.getAllCategoryFrontList();
     }
 }
