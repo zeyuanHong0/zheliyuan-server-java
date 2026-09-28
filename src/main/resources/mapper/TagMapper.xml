@@ -66,6 +66,15 @@
         WHERE is_delete = 0
     </select>
 
+    <select id="getAllTagsFrontList" resultType="org.zly.blogbackjava.dto.tag.response.TagFrontListItem">
+        SELECT t.id,t.name,t.icon,t.icon_dark,COUNT(b.id) AS blogCount
+        FROM tags t
+        LEFT JOIN blog_tags bt ON t.id = bt.tagId
+        LEFT JOIN blogs b ON b.id = bt.blogId AND b.is_delete = 0 AND b.published = 1
+        WHERE t.is_delete = 0
+        GROUP BY t.id,t.name,t.icon,t.icon_dark
+    </select>
+
     <insert id="insertTag">
         INSERT INTO tags (id, name, icon, icon_dark)
         VALUES (#{id}, #{name}, NULLIF(#{icon}, ''), NULLIF(#{iconDark}, ''))

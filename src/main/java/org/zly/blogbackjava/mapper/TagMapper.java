@@ -1,6 +1,7 @@
 package org.zly.blogbackjava.mapper;
 
 import org.apache.ibatis.annotations.Param;
+import org.zly.blogbackjava.dto.tag.response.TagFrontListItem;
 import org.zly.blogbackjava.entity.Tag;
 
 import java.util.List;
@@ -25,6 +26,8 @@ public interface TagMapper {
     Integer countAllTags();
 
     List<Tag> getAllTags();
+
+    List<TagFrontListItem> getAllTagsFrontList();
 
     List<Tag> getTagsByIds(@Param("ids") List<String> ids);
 

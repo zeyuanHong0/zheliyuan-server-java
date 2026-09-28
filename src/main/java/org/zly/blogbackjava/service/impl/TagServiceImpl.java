@@ -9,6 +9,7 @@ import org.zly.blogbackjava.dto.tag.response.TagPageListItem;
 import org.zly.blogbackjava.dto.tag.response.TagPageListResult;
 import org.zly.blogbackjava.dto.tag.response.TagSimpleItem;
 import org.zly.blogbackjava.dto.tag.response.TagInfoResult;
+import org.zly.blogbackjava.dto.tag.response.TagFrontListItem;
 import org.zly.blogbackjava.entity.Tag;
 import org.zly.blogbackjava.exception.BusinessException;
 import org.zly.blogbackjava.repository.TagRepository;
@@ -92,6 +93,11 @@ public class TagServiceImpl implements TagService {
         return allTags.stream()
                 .map(tag -> new TagSimpleItem(tag.getId(), tag.getName()))
                 .toList();
+    }
+
+    @Override
+    public List<TagFrontListItem> getAllTagsFrontList() {
+        return tagRepository.getAllTagsFrontList();
     }
 
     @Override
