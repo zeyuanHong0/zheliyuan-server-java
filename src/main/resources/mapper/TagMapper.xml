@@ -13,6 +13,40 @@
         <result property="isDelete" column="is_delete"/>
     </resultMap>
 
+    <resultMap id="TagFrontInfoResultMap" type="org.zly.blogbackjava.dto.tag.response.TagFrontInfo">
+        <id property="id" column="tagId"/>
+        <result property="name" column="tagName"/>
+
+        <collection property="blogs"
+                    javaType="list"
+                    ofType="org.zly.blogbackjava.dto.tag.response.TagFrontInfo$BlogItem">
+            <id property="id" column="blogId"/>
+            <result property="title" column="title"/>
+            <result property="description" column="description"/>
+            <result property="createTime" column="createTime"/>
+            <result property="updateTime" column="updateTime"/>
+
+            <association property="author"
+                         javaType="org.zly.blogbackjava.dto.tag.response.TagFrontInfo$SimpleItem">
+                <id property="id" column="authorId"/>
+                <result property="name" column="authorName"/>
+            </association>
+
+            <association property="category"
+                         javaType="org.zly.blogbackjava.dto.tag.response.TagFrontInfo$SimpleItem">
+                <id property="id" column="categoryId"/>
+                <result property="name" column="categoryName"/>
+            </association>
+
+            <collection property="tags"
+                        javaType="list"
+                        ofType="org.zly.blogbackjava.dto.tag.response.TagFrontInfo$SimpleItem">
+                <id property="id" column="blogTagId"/>
+                <result property="name" column="blogTagName"/>
+            </collection>
+        </collection>
+    </resultMap>
+
     <select id="getTagListByPage" resultMap="TagResultMap">
         SELECT * FROM tags
         <where>
@@ -74,6 +108,24 @@
         WHERE t.is_delete = 0
         GROUP BY t.id,t.name,t.icon,t.icon_dark
     </select>
+
+    <select id="getTagFrontInfo" resultMap="TagFrontInfoResultMap">
+        SELECT t.id AS tagId, t.name AS tagName,
+        b.id AS blogId, b.title, b.description, b.createTime, b.updateTime,
+        u.id AS authorId, u.username AS authorName,
+        c.id AS categoryId, c.name AS categoryName,
+        blog_tag.id AS blogTagId, blog_tag.name AS blogTagName
+        FROM tags t
+        LEFT JOIN blog_tags bt ON bt.tagId = t.id
+        LEFT JOIN blogs b ON b.id = bt.blogId AND b.is_delete = 0 AND b.published = 1
+        LEFT JOIN users u ON u.id = b.createUser
+        LEFT JOIN category c ON b.categoryId = c.id AND c.is_delete = 0
+        LEFT JOIN blog_tags blog_bt ON blog_bt.blogId = b.id
+        LEFT JOIN tags blog_tag ON blog_tag.id = blog_bt.tagId AND blog_tag.is_delete = 0
+        WHERE t.id = #{tagId} AND t.is_delete = 0
+        ORDER BY b.createTime DESC, b.id DESC
+    </select>
+
 
     <insert id="insertTag">
         INSERT INTO tags (id, name, icon, icon_dark)

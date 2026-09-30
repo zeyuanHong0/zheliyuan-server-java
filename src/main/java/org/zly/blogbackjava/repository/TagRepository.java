@@ -1,6 +1,7 @@
 package org.zly.blogbackjava.repository;
 
 import org.zly.blogbackjava.dto.tag.response.TagFrontListItem;
+import org.zly.blogbackjava.dto.tag.response.TagFrontInfo;
 import org.zly.blogbackjava.entity.Tag;
 
 import java.util.List;
@@ -18,6 +19,8 @@ public interface TagRepository {
     List<Tag> getAllTags();
 
     List<TagFrontListItem> getAllTagsFrontList();
+
+    TagFrontInfo getTagFrontInfo(String id);
 
     List<Tag> getTagsByIds(List<String> ids);
 

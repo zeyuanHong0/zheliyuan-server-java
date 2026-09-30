@@ -7,6 +7,7 @@ import org.zly.blogbackjava.dto.tag.response.TagPageListResult;
 import org.zly.blogbackjava.dto.tag.response.TagSimpleItem;
 import org.zly.blogbackjava.dto.tag.response.TagInfoResult;
 import org.zly.blogbackjava.dto.tag.response.TagFrontListItem;
+import org.zly.blogbackjava.dto.tag.response.TagFrontInfo;
 
 import java.util.List;
 
@@ -26,4 +27,6 @@ public interface TagService {
     List<TagSimpleItem> getAllTagList();
 
     List<TagFrontListItem> getAllTagsFrontList();
+
+    TagFrontInfo getTagFrontInfo(String id);
 }

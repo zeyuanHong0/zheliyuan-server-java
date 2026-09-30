@@ -1,6 +1,7 @@
 package org.zly.blogbackjava.repository.impl;
 
 import org.springframework.stereotype.Component;
+import org.zly.blogbackjava.dto.tag.response.TagFrontInfo;
 import org.zly.blogbackjava.dto.tag.response.TagFrontListItem;
 import org.zly.blogbackjava.entity.Tag;
 import org.zly.blogbackjava.mapper.TagMapper;
@@ -46,6 +47,11 @@ public class TagRepositoryImpl implements TagRepository {
     @Override
     public List<TagFrontListItem> getAllTagsFrontList() {
         return tagMapper.getAllTagsFrontList();
+    }
+
+    @Override
+    public TagFrontInfo getTagFrontInfo(String id) {
+        return tagMapper.getTagFrontInfo(id);
     }
 
     @Override
