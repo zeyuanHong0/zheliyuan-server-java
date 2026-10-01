@@ -3,10 +3,7 @@ package org.zly.blogbackjava.service;
 import org.zly.blogbackjava.dto.blog.request.BlogPageQueryDto;
 import org.zly.blogbackjava.dto.blog.request.CreateBlogDto;
 import org.zly.blogbackjava.dto.blog.request.UpdateBlogDto;
-import org.zly.blogbackjava.dto.blog.response.AllBlogsResult;
-import org.zly.blogbackjava.dto.blog.response.BlogFrontInfo;
-import org.zly.blogbackjava.dto.blog.response.BlogInfoResult;
-import org.zly.blogbackjava.dto.blog.response.BlogPageListResult;
+import org.zly.blogbackjava.dto.blog.response.*;
 import org.zly.blogbackjava.entity.User;
 
 import java.util.List;
@@ -41,4 +38,6 @@ public interface BlogService {
     BlogFrontInfo getFrontInfo(String id);
 
     List<AllBlogsResult> getAllBlogs();
+
+    List<ArchivesItem> getArchives();
 }

@@ -78,8 +78,8 @@ public class BlogRepositoryImpl implements BlogRepository {
 
     @Override
     public List<Map<String, Object>> countPublishedBlogsByDate(LocalDateTime startTime,
-                                                                LocalDateTime endTime,
-                                                                String createUser) {
+                                                               LocalDateTime endTime,
+                                                               String createUser) {
         return blogMapper.countPublishedBlogsByDate(startTime, endTime, createUser);
     }
 
@@ -116,5 +116,10 @@ public class BlogRepositoryImpl implements BlogRepository {
     @Override
     public List<AllBlogsResult> getAllBlogs() {
         return blogMapper.getAllBlogs();
+    }
+
+    @Override
+    public List<ArchivesItem> getArchives() {
+        return blogMapper.getArchives();
     }
 }

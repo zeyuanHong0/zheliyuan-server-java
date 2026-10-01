@@ -379,4 +379,9 @@ public class BlogServiceImpl implements BlogService {
     public List<AllBlogsResult> getAllBlogs() {
         return blogRepository.getAllBlogs();
     }
+
+    @Override
+    public List<ArchivesItem> getArchives() {
+        return blogRepository.getArchives();
+    }
 }

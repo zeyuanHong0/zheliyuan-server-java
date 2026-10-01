@@ -69,4 +69,6 @@ public interface BlogMapper {
     BlogFrontInfo getFrontInfo(@Param("blogId") String blogId);
 
     List<AllBlogsResult> getAllBlogs();
+
+    List<ArchivesItem> getArchives();
 }

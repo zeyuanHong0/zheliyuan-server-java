@@ -299,6 +299,16 @@
         ORDER BY b.createTime DESC, b.id DESC
     </select>
 
+    <select id="getArchives" resultType="org.zly.blogbackjava.dto.blog.response.ArchivesItem">
+        SELECT id,title,createTime
+        FROM blogs
+        <where>
+            is_delete = 0
+            AND published = 1
+        </where>
+        ORDER BY createTime DESC, id DESC
+    </select>
+
     <insert id="insertBlog" parameterType="org.zly.blogbackjava.entity.Blog">
         INSERT INTO blogs (id, title, description, content, published, categoryId, createUser)
         VALUES (#{id}, #{title}, #{description}, #{content}, #{published}, #{categoryId}, #{createUser})

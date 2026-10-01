@@ -46,4 +46,6 @@ public interface BlogRepository {
     BlogFrontInfo getFrontInfo(String id);
 
     List<AllBlogsResult> getAllBlogs();
+
+    List<ArchivesItem> getArchives();
 }
