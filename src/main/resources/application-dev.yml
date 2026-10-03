@@ -1,7 +1,4 @@
 spring:
-  mvc:
-    servlet:
-      path: /api
   docker:
     compose:
       enabled: false
