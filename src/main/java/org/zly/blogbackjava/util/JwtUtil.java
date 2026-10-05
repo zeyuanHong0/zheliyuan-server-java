@@ -16,13 +16,17 @@ public class JwtUtil {
     @Value("${app.jwt.secret}")
     private String jwtSecret;
 
+    @Value("${app.jwt.miniapp-secret}")
+    private String miniappJwtSecret;
+
     long EXPIRATION_TIME = 7 * 24 * 60 * 60 * 1000; // 7天过期时间
 
-    private SecretKey getSigningKey() {
+    private SecretKey getSigningKey(String secret) {
         return Keys.hmacShaKeyFor(
-                jwtSecret.getBytes(StandardCharsets.UTF_8)
+                secret.getBytes(StandardCharsets.UTF_8)
         );
     }
+
 
     public String generateToken(String id, String username) {
         // 用 生成 token
@@ -33,7 +37,7 @@ public class JwtUtil {
                 .claim("username", username)
                 .issuedAt(now)
                 .expiration(expiryDate)
-                .signWith(getSigningKey())
+                .signWith(getSigningKey(jwtSecret))
                 .compact();
     }
 
@@ -45,14 +49,52 @@ public class JwtUtil {
                 .claim("type", "reset_password")
                 .issuedAt(now)
                 .expiration(expiryDate)
-                .signWith(getSigningKey())
+                .signWith(getSigningKey(jwtSecret))
+                .compact();
+    }
+
+    public String generateMiniappAccessToken(String id, String openid) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + 24L * 60 * 60 * 1000); // 1天过期时间
+        return Jwts.builder()
+                .claim("id", id)
+                .claim("openid", openid)
+                .claim("loginType", "miniapp")
+                .claim("type", "access")
+                .issuedAt(now)
+                .expiration(expiryDate)
+                .signWith(getSigningKey(miniappJwtSecret))
+                .compact();
+    }
+
+    public String generateMiniappRefreshToken(String id, String openid) {
+        // 30 天
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + 30L * 24 * 60 * 60 * 1000); // 30天过期时间
+        return Jwts.builder()
+                .claim("id", id)
+                .claim("openid", openid)
+                .claim("loginType", "miniapp")
+                .claim("type", "refresh")
+                .issuedAt(now)
+                .expiration(expiryDate)
+                .signWith(getSigningKey(miniappJwtSecret))
                 .compact();
     }
 
     public Claims parseToken(String token) {
         // 解析 token，返回 claims
         return Jwts.parser()
-                .verifyWith(getSigningKey())
+                .verifyWith(getSigningKey(jwtSecret))
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+    public Claims parseMiniappToken(String token) {
+        // 解析 miniapp token，返回 claims
+        return Jwts.parser()
+                .verifyWith(getSigningKey(miniappJwtSecret))
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
