@@ -84,4 +84,9 @@ public class MiniappServiceImpl implements MiniappService {
         String refreshToken = jwtUtil.generateMiniappRefreshToken(wxUser.getId(), wxUser.getOpenid());
         return new MiniappLoginResult(accessToken, refreshToken);
     }
+
+    @Override
+    public String refreshAccessToken(WxUser wxUser) {
+        return jwtUtil.generateMiniappAccessToken(wxUser.getId(), wxUser.getOpenid());
+    }
 }

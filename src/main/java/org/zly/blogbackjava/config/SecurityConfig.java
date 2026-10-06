@@ -15,6 +15,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.zly.blogbackjava.filter.JwtAuthenticationFilter;
+import org.zly.blogbackjava.filter.MiniappRefreshTokenFilter;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final MiniappRefreshTokenFilter miniappRefreshTokenFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -39,6 +41,7 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(miniappRefreshTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable);
 
