@@ -1,6 +1,7 @@
 package org.zly.blogbackjava.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -15,6 +16,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.zly.blogbackjava.filter.JwtAuthenticationFilter;
+import org.zly.blogbackjava.filter.MiniappAccessTokenFilter;
 import org.zly.blogbackjava.filter.MiniappRefreshTokenFilter;
 
 import java.util.List;
@@ -25,6 +27,7 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final MiniappAccessTokenFilter miniappAccessTokenFilter;
     private final MiniappRefreshTokenFilter miniappRefreshTokenFilter;
 
     @Bean
@@ -42,10 +45,29 @@ public class SecurityConfig {
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(miniappRefreshTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(miniappAccessTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable);
 
         return http.build();
+    }
+
+    @Bean
+    public FilterRegistrationBean<MiniappAccessTokenFilter> miniappAccessTokenFilterRegistration(
+            MiniappAccessTokenFilter filter
+    ) {
+        FilterRegistrationBean<MiniappAccessTokenFilter> registration = new FilterRegistrationBean<>(filter);
+        registration.setEnabled(false);
+        return registration;
+    }
+
+    @Bean
+    public FilterRegistrationBean<MiniappRefreshTokenFilter> miniappRefreshTokenFilterRegistration(
+            MiniappRefreshTokenFilter filter
+    ) {
+        FilterRegistrationBean<MiniappRefreshTokenFilter> registration = new FilterRegistrationBean<>(filter);
+        registration.setEnabled(false);
+        return registration;
     }
 
     @Bean
