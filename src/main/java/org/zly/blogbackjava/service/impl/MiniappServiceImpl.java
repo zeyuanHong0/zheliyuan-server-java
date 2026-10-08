@@ -18,6 +18,7 @@ public class MiniappServiceImpl implements MiniappService {
     private final RestClient restClient;
     private final String wxAppId;
     private final String wxAppSecret;
+    private final String adminOpenid;
     private final MiniappUserRepository miniappUserRepository;
     private final JwtUtil jwtUtil;
     private final ObjectMapper objectMapper;
@@ -25,6 +26,7 @@ public class MiniappServiceImpl implements MiniappService {
     public MiniappServiceImpl(RestClient.Builder restClientBuilder,
                               @Value("${app.miniapp.app-id}") String wxAppId,
                               @Value("${app.miniapp.secret}") String wxAppSecret,
+                              @Value("${app.miniapp.owner-openid}") String adminOpenid,
                               MiniappUserRepository miniappUserRepository,
                               JwtUtil jwtUtil,
                               ObjectMapper objectMapper) {
@@ -34,6 +36,7 @@ public class MiniappServiceImpl implements MiniappService {
         this.miniappUserRepository = miniappUserRepository;
         this.jwtUtil = jwtUtil;
         this.objectMapper = objectMapper;
+        this.adminOpenid = adminOpenid;
     }
 
     @Override
@@ -81,12 +84,18 @@ public class MiniappServiceImpl implements MiniappService {
             miniappUserRepository.insertMiniappUser(wxUser);
         }
         String accessToken = jwtUtil.generateMiniappAccessToken(wxUser.getId(), wxUser.getOpenid());
-        String refreshToken = jwtUtil.generateMiniappRefreshToken(wxUser.getId(), wxUser.getOpenid());
+        String refreshToken = jwtUtil.generateMiniappRefreshToken(wxUser.getId(),
+                wxUser.getOpenid());
         return new MiniappLoginResult(accessToken, refreshToken);
     }
 
     @Override
     public String refreshAccessToken(WxUser wxUser) {
         return jwtUtil.generateMiniappAccessToken(wxUser.getId(), wxUser.getOpenid());
+    }
+
+    @Override
+    public boolean isUserAdmin(String openid) {
+        return adminOpenid.equals(openid);
     }
 }

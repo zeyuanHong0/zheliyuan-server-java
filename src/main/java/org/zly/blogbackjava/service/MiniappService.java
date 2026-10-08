@@ -8,4 +8,6 @@ public interface MiniappService {
     MiniappLoginResult miniappLogin(String code);
 
     String refreshAccessToken(WxUser wxUser);
+
+    boolean isUserAdmin(String openid);
 }

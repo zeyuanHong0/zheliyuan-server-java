@@ -1,11 +1,10 @@
 package org.zly.blogbackjava.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.zly.blogbackjava.annotation.RequireLogin;
 import org.zly.blogbackjava.common.response.ApiResponse;
 import org.zly.blogbackjava.dto.miniapp.request.MiniappLoginDto;
 import org.zly.blogbackjava.dto.miniapp.response.MiniappLoginResult;
@@ -34,5 +33,12 @@ public class MiniappController {
     public ApiResponse<Map<String, String>> refreshToken(@AuthenticationPrincipal WxUser wxUser) {
         String accessToken = miniappService.refreshAccessToken(wxUser);
         return ApiResponse.success("刷新成功", Map.of("access_token", accessToken));
+    }
+
+    @GetMapping("/isUserAdmin")
+    @RequireLogin
+    public ApiResponse<Map<String, Boolean>> isUserAdmin(@AuthenticationPrincipal WxUser wxUser) {
+        boolean isAdmin = miniappService.isUserAdmin(wxUser.getOpenid());
+        return ApiResponse.success("查询成功", Map.of("isAdmin", isAdmin));
     }
 }
