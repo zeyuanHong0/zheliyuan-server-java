@@ -33,8 +33,9 @@ public class MiniappRefreshTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = ApiPathUtil.withoutApiPrefix(request.getServletPath());
         return !"POST".equalsIgnoreCase(request.getMethod())
-                || !REFRESH_PATH.equals(request.getServletPath());
+                || !REFRESH_PATH.equals(path);
     }
 
     @Override

@@ -50,7 +50,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return request.getServletPath().startsWith("/miniapp/");
+        String path = ApiPathUtil.withoutApiPrefix(request.getServletPath());
+        return path.startsWith("/miniapp/");
     }
 
     @Override

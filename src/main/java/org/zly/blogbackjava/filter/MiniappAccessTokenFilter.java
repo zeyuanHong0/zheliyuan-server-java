@@ -32,7 +32,7 @@ public class MiniappAccessTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getServletPath();
+        String path = ApiPathUtil.withoutApiPrefix(request.getServletPath());
         return !path.startsWith("/miniapp/")
                 || "/miniapp/login".equals(path)
                 || "/miniapp/refresh".equals(path);
