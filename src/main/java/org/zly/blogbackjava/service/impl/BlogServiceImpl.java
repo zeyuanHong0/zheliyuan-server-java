@@ -384,4 +384,12 @@ public class BlogServiceImpl implements BlogService {
     public List<ArchivesItem> getArchives() {
         return blogRepository.getArchives();
     }
+
+    @Override
+    public List<AllBlogsResult> getLatestBlogList(Integer num) {
+        if (num == null || num < 1) {
+            throw new BusinessException(400, "num必须大于0");
+        }
+        return blogRepository.getLatestBlogList(num);
+    }
 }

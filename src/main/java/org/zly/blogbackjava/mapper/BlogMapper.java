@@ -71,4 +71,6 @@ public interface BlogMapper {
     List<AllBlogsResult> getAllBlogs();
 
     List<ArchivesItem> getArchives();
+
+    List<AllBlogsResult> getLatestBlogList(@Param("num") Integer num);
 }

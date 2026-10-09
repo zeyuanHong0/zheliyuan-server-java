@@ -122,4 +122,9 @@ public class BlogRepositoryImpl implements BlogRepository {
     public List<ArchivesItem> getArchives() {
         return blogMapper.getArchives();
     }
+
+    @Override
+    public List<AllBlogsResult> getLatestBlogList(Integer num) {
+        return blogMapper.getLatestBlogList(num);
+    }
 }

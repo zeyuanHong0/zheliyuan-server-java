@@ -1,0 +1,30 @@
+package org.zly.blogbackjava.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.zly.blogbackjava.common.response.ApiResponse;
+import org.zly.blogbackjava.dto.blog.response.AllBlogsResult;
+import org.zly.blogbackjava.service.BlogService;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/miniapp/blog")
+public class BlogMiniappController {
+
+    private final BlogService blogService;
+
+    public BlogMiniappController(BlogService blogService) {
+        this.blogService = blogService;
+    }
+
+    @GetMapping("/getLatestBlogList")
+    public ApiResponse<List<AllBlogsResult>> getLatestBlogList(
+            @RequestParam(name = "num", required = false) Integer num
+    ) {
+        List<AllBlogsResult> result = blogService.getLatestBlogList(num);
+        return ApiResponse.success("获取成功", result);
+    }
+}

@@ -48,4 +48,6 @@ public interface BlogRepository {
     List<AllBlogsResult> getAllBlogs();
 
     List<ArchivesItem> getArchives();
+
+    List<AllBlogsResult> getLatestBlogList(Integer num);
 }

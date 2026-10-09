@@ -40,4 +40,6 @@ public interface BlogService {
     List<AllBlogsResult> getAllBlogs();
 
     List<ArchivesItem> getArchives();
+
+    List<AllBlogsResult> getLatestBlogList(Integer num);
 }
