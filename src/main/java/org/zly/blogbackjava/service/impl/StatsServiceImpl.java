@@ -46,4 +46,12 @@ public class StatsServiceImpl implements StatsService {
                 "tagDistribution", tagDistribution
         );
     }
+
+    @Override
+    public List<Integer> getBlogStats() {
+        Integer blogCount = blogService.getPublishedBlogCount(null);
+        Integer tagCount = tagService.getTagCount();
+        Integer categoryCount = categoryService.getCategoryCount();
+        return List.of(blogCount, tagCount, categoryCount);
+    }
 }

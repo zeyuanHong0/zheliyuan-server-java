@@ -250,9 +250,12 @@ public class BlogServiceImpl implements BlogService {
      */
     @Override
     public Integer getPublishedBlogCount(User user) {
-        boolean isAdmin = userService.isAdmin(user.getId());
-        String userId = isAdmin ? null : user.getId();
-        return blogRepository.countPublishedBlogs(userId);
+        if(user != null) {
+            boolean isAdmin = userService.isAdmin(user.getId());
+            String userId = isAdmin ? null : user.getId();
+            return blogRepository.countPublishedBlogs(userId);
+        }
+        return blogRepository.countPublishedBlogs(null);
     }
 
     /**
