@@ -1,0 +1,11 @@
+.git
+.idea
+target
+build
+.env
+.env.*
+!.env.example
+config/secrets-*.yml
+config/secrets-*.yaml
+logs
+*.log

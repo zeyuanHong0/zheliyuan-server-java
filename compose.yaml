@@ -1,1 +1,21 @@
-services: { }
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    init: true
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SERVER_PORT: "3000"
+      JAVA_TOOL_OPTIONS: "-Duser.timezone=Asia/Shanghai"
+      DB_HOST: ${DB_HOST:-host.docker.internal}
+    volumes:
+      - type: bind
+        source: ./config/secrets-prod.yml
+        target: /app/config/secrets-prod.yml
+        read_only: true
+        bind:
+          create_host_path: false
+    ports:
+      - "127.0.0.1:3000:3000"

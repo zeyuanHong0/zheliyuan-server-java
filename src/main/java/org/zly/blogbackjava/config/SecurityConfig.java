@@ -43,9 +43,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().permitAll()
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(miniappRefreshTokenFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(miniappAccessTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(miniappRefreshTokenFilter,
+                        UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(miniappAccessTokenFilter,
+                        UsernamePasswordAuthenticationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable);
 
@@ -56,7 +59,8 @@ public class SecurityConfig {
     public FilterRegistrationBean<MiniappAccessTokenFilter> miniappAccessTokenFilterRegistration(
             MiniappAccessTokenFilter filter
     ) {
-        FilterRegistrationBean<MiniappAccessTokenFilter> registration = new FilterRegistrationBean<>(filter);
+        FilterRegistrationBean<MiniappAccessTokenFilter> registration = new FilterRegistrationBean<>(
+                filter);
         registration.setEnabled(false);
         return registration;
     }
@@ -65,7 +69,8 @@ public class SecurityConfig {
     public FilterRegistrationBean<MiniappRefreshTokenFilter> miniappRefreshTokenFilterRegistration(
             MiniappRefreshTokenFilter filter
     ) {
-        FilterRegistrationBean<MiniappRefreshTokenFilter> registration = new FilterRegistrationBean<>(filter);
+        FilterRegistrationBean<MiniappRefreshTokenFilter> registration = new FilterRegistrationBean<>(
+                filter);
         registration.setEnabled(false);
         return registration;
     }
@@ -73,7 +78,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://127.0.0.1:5173"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://127.0.0.1:5173",
+                "https://www.zlyhub.com"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
