@@ -26,7 +26,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
         sessions.add(session);
-        log.info("WebSocket client connected: {}", session.getId());
+        log.info("WebSocket 客户端已连接：sessionId={}", session.getId());
     }
 
     @Override
@@ -44,7 +44,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
             CloseStatus status
     ) {
         sessions.remove(session);
-        log.info("WebSocket client disconnected: {}, status: {}", session.getId(), status);
+            log.info("WebSocket 客户端已断开：sessionId={}，状态={}", session.getId(), status);
     }
 
     public void broadcastStatus(String event, Object payload) throws JacksonException {
@@ -65,7 +65,7 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
                 }
             } catch (IOException exception) {
                 sessions.remove(session);
-                log.warn("Failed to send WebSocket message to session {}", session.getId(), exception);
+                log.warn("向 WebSocket 客户端发送消息失败：sessionId={}", session.getId(), exception);
             }
         }
     }

@@ -82,7 +82,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ApiResponse<Void> handleUnknownException(Exception ex) {
-        log.error("Unhandled server exception", ex);
+        log.error("未处理的服务端异常", ex);
         return ApiResponse.error(500, "服务器内部错误");
     }
 }
