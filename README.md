@@ -54,6 +54,17 @@ java -jar target/blog-back-java-0.0.1-SNAPSHOT.jar  # 运行打包后的应用
 
 API 响应格式为 `code`、`message`、`data`。
 
+## 日志
+
+应用日志输出到控制台，采用北京时间时间戳；API 和 WebSocket 请求会记录方法、路径、HTTP 状态码和耗时。请求日志不记录查询参数、请求头或请求体，避免将验证码、令牌等敏感内容写入日志。未处理异常和邮件发送失败会记录异常堆栈；验证码明文不会记录。
+
+Docker Compose 为应用容器配置了 `json-file` 轮转，单个日志文件上限为 10 MB，最多保留 5 个文件。达到保留上限时 Docker 会清除较旧的轮转日志；这不是按天归档。
+
+```bash
+docker compose logs --tail=200 --timestamps app  # 查看最近日志
+docker compose logs -f --tail=100 app            # 持续查看，Ctrl+C 退出查看
+```
+
 ## Docker 生产部署
 
 生产环境使用 Docker Compose 运行 Java 应用，并连接服务器上已安装的 MySQL。MySQL 不由本项目的 Compose 启动。
