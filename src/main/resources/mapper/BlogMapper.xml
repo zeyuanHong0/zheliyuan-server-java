@@ -305,16 +305,51 @@
         t.id AS tagId,t.name AS tagName,
         u.id AS authorId, u.username AS authorName
         FROM (
-            SELECT id, title, description, createTime, categoryId, createUser
-            FROM blogs
-            WHERE is_delete = 0 AND published = 1
-            ORDER BY createTime DESC, id DESC
-            LIMIT #{num}
+        SELECT id, title, description, createTime, categoryId, createUser
+        FROM blogs
+        WHERE is_delete = 0 AND published = 1
+        ORDER BY createTime DESC, id DESC
+        LIMIT #{num}
         ) b
         LEFT JOIN category c ON c.id = b.categoryId
         LEFT JOIN users u ON u.id = b.createUser
         LEFT JOIN blog_tags bt ON bt.blogId = b.id
         LEFT JOIN tags t ON t.id = bt.tagId
+        ORDER BY b.createTime DESC, b.id DESC
+    </select>
+
+    <select id="searchBlogs" resultMap="AllBlogsResultMap">
+        SELECT b.id AS blogId, b.title, b.description, b.createTime,
+        c.id AS categoryId, c.name AS categoryName,
+        t.id AS tagId,t.name AS tagName,
+        u.id AS authorId, u.username AS authorName
+        FROM blogs b
+        LEFT JOIN category c ON c.id = b.categoryId
+        LEFT JOIN users u ON u.id = b.createUser
+        LEFT JOIN blog_tags bt ON bt.blogId = b.id
+        LEFT JOIN tags t ON t.id = bt.tagId
+        <where>
+            b.is_delete = 0
+            AND b.published = 1
+            <if test="keyword != null and keyword != ''">
+                AND (
+                    b.title LIKE CONCAT('%', #{keyword}, '%')
+                    OR b.description LIKE CONCAT('%', #{keyword}, '%')
+                    OR b.content LIKE CONCAT('%', #{keyword}, '%')
+                )
+            </if>
+            <if test="categoryId != null and categoryId != ''">
+                AND b.categoryId = #{categoryId}
+            </if>
+            <if test="tagId != null and tagId != ''">
+                AND EXISTS (
+                SELECT 1
+                FROM blog_tags bt
+                WHERE bt.blogId = b.id
+                AND bt.tagId = #{tagId}
+                )
+            </if>
+        </where>
         ORDER BY b.createTime DESC, b.id DESC
     </select>
 

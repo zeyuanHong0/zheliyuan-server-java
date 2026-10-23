@@ -50,4 +50,6 @@ public interface BlogRepository {
     List<ArchivesItem> getArchives();
 
     List<AllBlogsResult> getLatestBlogList(Integer num);
+
+    List<AllBlogsResult> searchBlogs(String keyword, String categoryId, String tagId);
 }

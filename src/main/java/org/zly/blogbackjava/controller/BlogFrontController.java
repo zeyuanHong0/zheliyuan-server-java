@@ -3,6 +3,7 @@ package org.zly.blogbackjava.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.zly.blogbackjava.common.response.ApiResponse;
 import org.zly.blogbackjava.dto.blog.response.AllBlogsResult;
@@ -32,6 +33,15 @@ public class BlogFrontController {
     public ApiResponse<List<AllBlogsResult>> getAllBlogs() {
         List<AllBlogsResult> allBlogs = blogService.getAllBlogs();
         return ApiResponse.success("获取成功", allBlogs);
+    }
+
+    @GetMapping("/search")
+    public ApiResponse<List<AllBlogsResult>> searchBlogs(
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "categoryId", required = false) String categoryId,
+            @RequestParam(name = "tagId", required = false) String tagId) {
+        return ApiResponse.success("获取成功",
+                blogService.searchBlogs(keyword, categoryId, tagId));
     }
 
     @GetMapping("/getArchives")

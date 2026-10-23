@@ -73,4 +73,9 @@ public interface BlogMapper {
     List<ArchivesItem> getArchives();
 
     List<AllBlogsResult> getLatestBlogList(@Param("num") Integer num);
+
+    List<AllBlogsResult> searchBlogs(
+            @Param("keyword") String keyword,
+            @Param("categoryId") String categoryId,
+            @Param("tagId") String tagId);
 }

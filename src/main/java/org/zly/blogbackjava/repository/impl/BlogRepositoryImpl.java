@@ -127,4 +127,9 @@ public class BlogRepositoryImpl implements BlogRepository {
     public List<AllBlogsResult> getLatestBlogList(Integer num) {
         return blogMapper.getLatestBlogList(num);
     }
+
+    @Override
+    public List<AllBlogsResult> searchBlogs(String keyword, String categoryId, String tagId) {
+        return blogMapper.searchBlogs(keyword, categoryId, tagId);
+    }
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.zly.blogbackjava.common.response.ApiResponse;
 import org.zly.blogbackjava.dto.tag.response.TagFrontInfo;
 import org.zly.blogbackjava.dto.tag.response.TagFrontListItem;
+import org.zly.blogbackjava.dto.tag.response.TagSimpleItem;
 import org.zly.blogbackjava.service.TagService;
 
 import java.util.List;
@@ -32,5 +33,11 @@ public class TagFrontController {
     public ApiResponse<TagFrontInfo> getTagInfo(@PathVariable String id) {
         TagFrontInfo tagInfo = tagService.getTagFrontInfo(id);
         return ApiResponse.success("获取成功", tagInfo);
+    }
+
+    @GetMapping("/getTagSelectList")
+    public ApiResponse<List<TagSimpleItem>> getTagSelectList() {
+        List<TagSimpleItem> list = tagService.getAllTagList();
+        return ApiResponse.success(list);
     }
 }

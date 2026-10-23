@@ -384,6 +384,11 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+    public List<AllBlogsResult> searchBlogs(String keyword, String categoryId, String tagId) {
+        return blogRepository.searchBlogs(keyword, categoryId, tagId);
+    }
+
+    @Override
     public List<ArchivesItem> getArchives() {
         return blogRepository.getArchives();
     }

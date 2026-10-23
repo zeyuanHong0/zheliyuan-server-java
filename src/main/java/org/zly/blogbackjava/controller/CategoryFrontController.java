@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.zly.blogbackjava.common.response.ApiResponse;
 import org.zly.blogbackjava.dto.category.response.CategoryFrontInfo;
 import org.zly.blogbackjava.dto.category.response.CategoryFrontListItem;
+import org.zly.blogbackjava.dto.category.response.CategoryListResult;
 import org.zly.blogbackjava.service.CategoryService;
 
 import java.util.List;
@@ -32,5 +33,11 @@ public class CategoryFrontController {
     public ApiResponse<CategoryFrontInfo> getCategoryInfo(@PathVariable("id") String id) {
         CategoryFrontInfo categoryInfo = categoryService.getCategoryFrontInfo(id);
         return ApiResponse.success("获取成功", categoryInfo);
+    }
+
+    @GetMapping("/getCategorySelectList")
+    public ApiResponse<List<CategoryListResult>> getCategorySelectList() {
+        List<CategoryListResult> result = categoryService.getAllCategoryList();
+        return ApiResponse.success("获取所有分类列表成功", result);
     }
 }
