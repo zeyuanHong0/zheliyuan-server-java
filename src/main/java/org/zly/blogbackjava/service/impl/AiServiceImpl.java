@@ -38,7 +38,7 @@ public class AiServiceImpl implements AiService {
         Map<String, Object> body = Map.of("model", model, "temperature", 0.3, "messages",
                 List.of(Map.of("role", "system", "content", "你是一个专业的技术博客编辑。"),
                         Map.of("role", "user", "content", "请对下面这篇博客内容进行总结：" +
-                                "要求：1. 使用中文 2. 3~4 行 3. 不添加原文没有的观点\n" +
+                                "要求：1. 使用中文 2. 200字左右 3. 不添加原文没有的观点\n" +
                                 "博客内容：\n" + content)));
 
         JsonNode response = restClient.post()
