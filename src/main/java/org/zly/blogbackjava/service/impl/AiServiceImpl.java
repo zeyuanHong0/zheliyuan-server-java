@@ -37,8 +37,9 @@ public class AiServiceImpl implements AiService {
     public String summarizeBlog(String content) {
         Map<String, Object> body = Map.of("model", model, "temperature", 0.3, "messages",
                 List.of(Map.of("role", "system", "content", "你是一个专业的技术博客编辑。"),
-                        Map.of("role", "user", "content", "请对下面这篇博客内容进行总结：" +
-                                "要求：1. 使用中文 2. 200字左右 3. 不添加原文没有的观点\n" +
+                        Map.of("role", "user", "content", "请用中文总结下面这篇博客：" +
+                                "摘要总长度控制在150～200个字符（包括标点和空格），只输出一段摘要，" +
+                                "不要标题、列表或额外说明，不添加原文没有的观点。\n" +
                                 "博客内容：\n" + content)));
 
         JsonNode response = restClient.post()
