@@ -318,16 +318,7 @@
         ORDER BY b.createTime DESC, b.id DESC
     </select>
 
-    <select id="searchBlogs" resultMap="AllBlogsResultMap">
-        SELECT b.id AS blogId, b.title, b.description, b.createTime,
-        c.id AS categoryId, c.name AS categoryName,
-        t.id AS tagId,t.name AS tagName,
-        u.id AS authorId, u.username AS authorName
-        FROM blogs b
-        LEFT JOIN category c ON c.id = b.categoryId
-        LEFT JOIN users u ON u.id = b.createUser
-        LEFT JOIN blog_tags bt ON bt.blogId = b.id
-        LEFT JOIN tags t ON t.id = bt.tagId
+    <sql id="frontBlogSearchConditions">
         <where>
             b.is_delete = 0
             AND b.published = 1
@@ -350,6 +341,44 @@
                 )
             </if>
         </where>
+    </sql>
+
+    <select id="getFrontBlogPageList" resultMap="AllBlogsResultMap">
+        SELECT b.id AS blogId, b.title, b.description, b.createTime,
+        c.id AS categoryId, c.name AS categoryName,
+        t.id AS tagId, t.name AS tagName,
+        u.id AS authorId, u.username AS authorName
+        FROM (
+        SELECT b.id, b.title, b.description, b.createTime, b.categoryId, b.createUser
+        FROM blogs b
+        <include refid="frontBlogSearchConditions"/>
+        ORDER BY b.createTime DESC, b.id DESC
+        LIMIT #{offset}, #{pageSize}
+        ) b
+        LEFT JOIN category c ON c.id = b.categoryId
+        LEFT JOIN users u ON u.id = b.createUser
+        LEFT JOIN blog_tags bt ON bt.blogId = b.id
+        LEFT JOIN tags t ON t.id = bt.tagId
+        ORDER BY b.createTime DESC, b.id DESC
+    </select>
+
+    <select id="countFrontBlogPageList" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM blogs b
+        <include refid="frontBlogSearchConditions"/>
+    </select>
+
+    <select id="searchBlogs" resultMap="AllBlogsResultMap">
+        SELECT b.id AS blogId, b.title, b.description, b.createTime,
+        c.id AS categoryId, c.name AS categoryName,
+        t.id AS tagId,t.name AS tagName,
+        u.id AS authorId, u.username AS authorName
+        FROM blogs b
+        LEFT JOIN category c ON c.id = b.categoryId
+        LEFT JOIN users u ON u.id = b.createUser
+        LEFT JOIN blog_tags bt ON bt.blogId = b.id
+        LEFT JOIN tags t ON t.id = bt.tagId
+        <include refid="frontBlogSearchConditions"/>
         ORDER BY b.createTime DESC, b.id DESC
     </select>
 

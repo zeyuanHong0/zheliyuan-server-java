@@ -384,6 +384,21 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public BlogFrontPageResult getFrontBlogPageList(Integer pageNum, String keyword,
+                                                     String categoryId, String tagId) {
+        if (pageNum == null || pageNum < 1) {
+            throw new BusinessException(400, "页码必须大于0");
+        }
+        int pageSize = 10;
+        long offset = ((long) pageNum - 1) * pageSize;
+        List<AllBlogsResult> blogs = blogRepository.getFrontBlogPageList(
+                keyword, categoryId, tagId, offset, pageSize);
+        Long total = blogRepository.countFrontBlogPageList(keyword, categoryId, tagId);
+        return new BlogFrontPageResult(blogs, total, pageNum, pageSize);
+    }
+
+    @Override
     public List<AllBlogsResult> searchBlogs(String keyword, String categoryId, String tagId) {
         return blogRepository.searchBlogs(keyword, categoryId, tagId);
     }

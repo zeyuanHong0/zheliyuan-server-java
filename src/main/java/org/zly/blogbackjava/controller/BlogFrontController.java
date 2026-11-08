@@ -9,6 +9,7 @@ import org.zly.blogbackjava.common.response.ApiResponse;
 import org.zly.blogbackjava.dto.blog.response.AllBlogsResult;
 import org.zly.blogbackjava.dto.blog.response.ArchivesItem;
 import org.zly.blogbackjava.dto.blog.response.BlogFrontInfo;
+import org.zly.blogbackjava.dto.blog.response.BlogFrontPageResult;
 import org.zly.blogbackjava.service.BlogService;
 
 import java.util.List;
@@ -33,6 +34,16 @@ public class BlogFrontController {
     public ApiResponse<List<AllBlogsResult>> getAllBlogs() {
         List<AllBlogsResult> allBlogs = blogService.getAllBlogs();
         return ApiResponse.success("获取成功", allBlogs);
+    }
+
+    @GetMapping("/getBlogPageList")
+    public ApiResponse<BlogFrontPageResult> getBlogPageList(
+            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "categoryId", required = false) String categoryId,
+            @RequestParam(name = "tagId", required = false) String tagId) {
+        return ApiResponse.success("获取成功",
+                blogService.getFrontBlogPageList(pageNum, keyword, categoryId, tagId));
     }
 
     @GetMapping("/search")

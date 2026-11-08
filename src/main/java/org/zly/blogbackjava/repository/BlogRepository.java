@@ -47,6 +47,11 @@ public interface BlogRepository {
 
     List<AllBlogsResult> getAllBlogs();
 
+    List<AllBlogsResult> getFrontBlogPageList(String keyword, String categoryId, String tagId,
+                                              long offset, int pageSize);
+
+    Long countFrontBlogPageList(String keyword, String categoryId, String tagId);
+
     List<ArchivesItem> getArchives();
 
     List<AllBlogsResult> getLatestBlogList(Integer num);

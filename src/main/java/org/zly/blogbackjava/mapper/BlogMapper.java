@@ -70,6 +70,18 @@ public interface BlogMapper {
 
     List<AllBlogsResult> getAllBlogs();
 
+    List<AllBlogsResult> getFrontBlogPageList(
+            @Param("keyword") String keyword,
+            @Param("categoryId") String categoryId,
+            @Param("tagId") String tagId,
+            @Param("offset") long offset,
+            @Param("pageSize") int pageSize);
+
+    Long countFrontBlogPageList(
+            @Param("keyword") String keyword,
+            @Param("categoryId") String categoryId,
+            @Param("tagId") String tagId);
+
     List<ArchivesItem> getArchives();
 
     List<AllBlogsResult> getLatestBlogList(@Param("num") Integer num);

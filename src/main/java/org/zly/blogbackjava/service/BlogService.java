@@ -39,6 +39,8 @@ public interface BlogService {
 
     List<AllBlogsResult> getAllBlogs();
 
+    BlogFrontPageResult getFrontBlogPageList(Integer pageNum, String keyword, String categoryId, String tagId);
+
     List<AllBlogsResult> searchBlogs(String keyword, String categoryId, String tagId);
 
     List<ArchivesItem> getArchives();

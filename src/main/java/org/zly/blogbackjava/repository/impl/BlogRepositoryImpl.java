@@ -119,6 +119,17 @@ public class BlogRepositoryImpl implements BlogRepository {
     }
 
     @Override
+    public List<AllBlogsResult> getFrontBlogPageList(String keyword, String categoryId, String tagId,
+                                                     long offset, int pageSize) {
+        return blogMapper.getFrontBlogPageList(keyword, categoryId, tagId, offset, pageSize);
+    }
+
+    @Override
+    public Long countFrontBlogPageList(String keyword, String categoryId, String tagId) {
+        return blogMapper.countFrontBlogPageList(keyword, categoryId, tagId);
+    }
+
+    @Override
     public List<ArchivesItem> getArchives() {
         return blogMapper.getArchives();
     }
